@@ -1,0 +1,106 @@
+﻿@using System.Globalization
+@using IntegracaoVExpensesWeb.Business.Utils
+@model IntegracaoVExpensesWeb.Models.RelatorioFilterViewModel
+@{
+    ViewBag.Title1 = "Relatório de despesas";
+}
+
+
+<div class="boxConteiner">
+
+    <div class="boxTitle">
+        <i class="fa fa-filter"></i> Filtros de Pesquisa
+    </div>
+
+    <div class="boxContent">
+        @using (Html.BeginForm("Index", "Relatorio", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.RelatorioId)
+                    @Html.TextBoxFor(model => model.RelatorioId, new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-3">
+                    <label>Data Início:</label>
+                    @Html.TextBoxFor(model => model.DataInicio, new { @class = "form-control", type = "month" })
+                </div>
+
+                <div class="col-md-3">
+                    <label>Data Fim:</label>
+                    @Html.TextBoxFor(model => model.DataFim, new { @class = "form-control", type = "month" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Usuario)
+                    @Html.DropDownList("Usuario", new SelectList(Model.Usuarios), "Todos", new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.StatusPagamento)
+                    @Html.EnumDropDownListFor(model => model.StatusPagamento, "Selecione", new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.StatusIntegracao)
+                    @Html.EnumDropDownListFor(model => model.StatusIntegracao, "Selecione", new { @class = "form-control" })
+                </div>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-outline-primary"><i class="fa fa-search"></i> Pesquisar</button>
+        }
+    </div>
+
+
+
+</div>
+
+<br />
+
+<div>
+    <button class="btn btn-primary" onclick="BuscarApi()">
+        <i class="fa-solid fa-globe"></i>
+        <i class="fa-solid fa-download"></i>
+        Consultar vExpenses
+    </button>
+</div>
+
+@if (Model.Relatorios.Count == 0)
+{
+    <div class="col-md-12 model-zero">
+        <span>Nenhum resultado encontrado</span>
+    </div>
+}
+else
+{
+    <span class="sub-title">
+        <i class="fa fa-calendar"></i>
+        Competência
+    </span>
+
+    foreach (var item in Model.Relatorios
+                                            .GroupBy(s => new { s.DataIntegracao.Year, s.DataIntegracao.Month })
+                                            .OrderByDescending(s => s.Key.Year)
+                                            .ThenByDescending(s => s.Key.Month))
+    {
+        int ano = item.FirstOrDefault().DataIntegracao.Year;
+        int mes = item.FirstOrDefault().DataIntegracao.Month;
+        CultureInfo culturePTBR = new CultureInfo("pt-BR");
+        string nomeDoMes = culturePTBR.DateTimeFormat.GetMonthName(mes).Capitalize();
+        <div class="monthConteiner">
+            <div class="monthBox">
+                <i class="fa fa-angle-right"></i>
+                @ano - @nomeDoMes
+            </div>
+
+            <div class="monthContent">
+                @Html.Partial("_DadosRelatorio", item.Select(s => s).ToList())
+            </div>
+        </div>
+
+    }
+
+
+
+
+}

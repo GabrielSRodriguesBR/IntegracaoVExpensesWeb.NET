@@ -1,0 +1,126 @@
+﻿@model IntegracaoVExpensesWeb.Business.VExpensesModel
+<script>
+	const resultadosAPI = @Html.Raw(ViewBag.resultadosAPI);
+</script>
+<div>
+
+    <button class="btn btn-primary" onclick="ChamarAPI()">
+        <i class="fa-solid fa-globe"></i>
+        <i class="fa-solid fa-download"></i>
+        Consultar novamente
+    </button>
+
+    <button class="btn btn-success" onclick="SalvarResultados()">
+        <i class="fa-solid fa-save"></i>
+        Salvar resultados
+    </button>
+
+</div>
+
+<div class="row">
+
+    @{
+        // Definir a cor e o ícone baseado no código de status
+        string statusColor;
+        string statusIcon;
+
+        switch (Model.code)
+        {
+            case 200:
+                statusColor = "text-success";
+                statusIcon = "fa-check-circle";
+                break;
+            case 400:
+                statusColor = "text-warning";
+                statusIcon = "fa-exclamation-circle";
+                break;
+            case 500:
+                statusColor = "text-danger";
+                statusIcon = "fa-times-circle";
+                break;
+            default:
+                statusColor = "text-secondary";
+                statusIcon = "fa-question-circle";
+                break;
+        }
+    }
+
+    <div class="issetBox">
+        <h4 class="title">Retorno:</h4>
+        <div><b>Status:</b> <i class="fas @statusIcon @statusColor"></i>  @Model.code</div>
+        <div><b>Mensagem:</b> <i>@Model.message</i></div>
+    </div>
+
+    <div class="issetBox">
+        <h4 class="title">Despesas</h4>
+        <div class="despesasList">
+            <table class="table table-small table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Observação</th>
+                        <th>Usuário</th>
+                        <th>Tipo Usuário</th>
+                        <th>ID Usuário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.data)
+                    {
+                        <tr class="parentContent">
+                            <td class="parentIcon"><i class="fa fa-angle-right"></i></td>
+                            <td>@item.id</td>
+                            <td>@item.description</td>
+                            <td>@Html.Raw(!String.IsNullOrEmpty(item.observation) ? item.observation : "--")</td>
+                            <td>@item.user.data.name</td>
+                            <td>@item.user.data.user_type</td>
+                            <td>@item.user.data.id</td>
+                        </tr>
+                        <tr class="childContent">
+                            <td colspan="7">
+                                <div class="row">
+                                    <table class="table table-small table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Data</th>
+                                                <th>Título</th>
+                                                <th style="width: 90px;">Valor</th>
+                                                <th>Observação</th>
+                                                <th>Tipo</th>
+                                                <th>Tipo ID</th>
+                                                <th>CC</th>
+                                                <th class="text-center">Url</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var despesa in item.expenses.data)
+                                            {
+                                                <tr>
+                                                    <td>@despesa.id</td>
+                                                    <td>@DateTime.Parse(@despesa.date).ToString("dd/MM/yyyy")</td>
+                                                    <td>@despesa.title</td>
+                                                    <td>@String.Format("{0:C}", @despesa.value)</td>
+                                                    <td class="truncate-text">@Html.Raw(!String.IsNullOrEmpty(despesa.observation) ? despesa.observation : "--")</td>
+                                                    <td>@despesa.expense_type.data.description</td>
+                                                    <td>@despesa.expense_type.data.integration_id</td>
+                                                    <td>@despesa.costs_center.data.name</td>
+                                                    <td class="text-center"><a href="@despesa.reicept_url" target="_blank"><i class="fa fa-eye"></i> Visualizar</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

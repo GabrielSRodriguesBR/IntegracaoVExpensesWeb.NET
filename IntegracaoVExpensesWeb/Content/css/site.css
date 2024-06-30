@@ -1,0 +1,286 @@
+﻿:root {
+    --color-grey: #e9e1e1;
+    --color-darkgrey: #5f5f5f;
+    --color-blue: #258cfb;
+    --color-lightgrey: #b5b5b5;
+    --color-mediumgrey: #6f6f6f;
+    --color-textgrey: #616060;
+    --color-green: #4eab1b;
+    --color-darkgreen: #41bd3a;
+    --color-red: #ab1b1b;
+    --color-darkred: #bd3a3a;
+}
+
+html {
+    font-size: 14px;
+}
+
+table {
+    font-size: 13px !important;
+}
+
+.table-small th {
+    border-bottom: 1px solid var(--color-darkgrey);
+    color: var(--color-darkgrey);
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--color-blue);
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.main-icon {
+    cursor: pointer;
+    border: 1px solid var(--color-grey);
+    padding: 2rem;
+    border-radius: 11px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    height: 10rem;
+}
+
+    .main-icon span {
+        text-align: center;
+    }
+
+    .main-icon svg {
+        font-size: 30px;
+        padding: 0.5rem 0;
+    }
+
+.loading {
+    padding: 1rem;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid var(--color-grey);
+    margin: 1rem 0;
+}
+
+    .loading span {
+        padding: 0 1rem;
+    }
+
+.pagination li {
+    background: white;
+    text-align: center;
+    border: 1px solid var(--color-lightgrey);
+    border-radius: 7px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .pagination li.active {
+        background: var(--color-mediumgrey);
+        color: white;
+    }
+
+    .pagination li a {
+        width: 50px !important;
+        padding: .5rem;
+        color: var(--color-textgrey);
+        text-decoration: none;
+    }
+
+    .pagination li:not(:last-child) {
+        margin-right: .4rem;
+    }
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.end {
+    display: flex;
+    justify-content: end;
+}
+
+.tagIntegrado {
+    color: var(--color-green) !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+    vertical-align: middle !important;
+    border-left: 1px solid var(--color-darkgreen) !important;
+    margin: 30px !important;
+}
+
+    .tagIntegrado::after {
+        content: "Integrado";
+    }
+
+.tagNIntegrado {
+    color: var(--color-red) !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+    vertical-align: middle !important;
+    border-left: 1px solid var(--color-darkred) !important;
+}
+
+    .tagNIntegrado::after {
+        content: "N\00E3o Integrado";
+    }
+
+.parentContent {
+    cursor: pointer;
+}
+
+.childContent {
+    border-left: 2px solid var(--color-darkgrey);
+    display: none
+}
+
+.truncate-text {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.despesasList {
+    height: calc(100vh - 420px);
+    overflow: auto;
+}
+
+
+.issetBox {
+    border: 1px solid #d9d6d6;
+    box-shadow: inset 0px 0px 8px 0px #cbcbcb;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+    .issetBox .title {
+        border-bottom: 1px solid #c5c5c5;
+        padding-bottom: 10px;
+    }
+
+
+.title {
+    background: white;
+    font-size: 23px;
+    margin-bottom: 2rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid #d1d1d1;
+}
+
+.monthConteiner {
+    margin: 1.5rem 0;
+}
+
+.monthBox {
+    padding: 1rem;
+    background: #ffffff;
+    font-size: 18px;
+    border: 1px solid #e3e3e3;
+    box-shadow: inset 0px 0px 8px 0px #e3e3e3;
+    border-bottom: 3px solid #0d6efd;
+    cursor: pointer;
+}
+
+    .monthBox:hover {
+        box-shadow: inset 0 -10px 8px 0px #e3e3e3;
+    }
+
+.monthContent {
+    display: none;
+}
+
+#conteudoAPI #stackpage {
+    overflow: auto !important;
+}
+
+
+.tabs {
+    margin-top: .5rem;
+    padding-left: .5rem;
+    border-left: 1px solid #adadad;
+}
+
+
+.nav-pendentes.active {
+    background: var(--color-red) !important;
+    border-radius: 0 !important;
+}
+
+.nav-pendentes:not(.active) {
+    color: var(--color-red) !important;
+    background: #efefef;
+    border-radius: 0;
+}
+
+.nav-integrados.active {
+    background: var(--color-darkgreen) !important;
+    border-radius: 0 !important;
+}
+
+.nav-integrados:not(.active) {
+    color: var(--color-darkgreen) !important;
+    background: #efefef;
+    border-radius: 0;
+}
+
+.nav {
+    background: #cfcfcf !important;
+}
+
+.model-zero {
+    padding: 1rem;
+    background: #f5f5f5;
+}
+
+.button-container {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+
+.sub-title {
+    margin-top: 1rem;
+    display: block;
+    font-weight: 500;
+    font-size: 17px;
+}
+
+
+.boxTitle {
+    padding: .5rem;
+    border: 1px solid #dbdbdb;
+    border-bottom: 3px solid #939393;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    background: #efefef;
+    color: #5d5d5d;
+}
+
+    .boxTitle:hover {
+        filter: brightness(0.9);
+    }
+
+
+.boxContent {
+    padding: 1rem;
+    border: 1px solid #dbdbdb;
+    display: none;
+}

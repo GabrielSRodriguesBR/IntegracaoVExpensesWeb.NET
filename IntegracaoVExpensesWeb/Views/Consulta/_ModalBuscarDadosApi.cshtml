@@ -1,0 +1,43 @@
+﻿
+<script>
+
+	$(function () {
+		ChamarAPI();
+	})
+
+
+	function ChamarAPI() {
+		$('#conteudoAPI').showLoadingMessage("Consultando vExpenses...");
+		$('#modalConsultaAPI .btn-close').prop('disabled', true);
+		$('#modalConsultaAPI .modal-dialog ')
+			.removeClass('modal-xl')
+			.addClass('modal-dialog-centered')
+
+		$('#conteudoAPI').load('@Url.Action("ChamarAPI")', (reqContent, reqMsg, reqStatus) => {
+			if (reqStatus.status == 500) {
+				$('#conteudoAPI').html('<h4 class="text-danger">Erro ao consultar a API</h4> ' + reqContent);
+			}
+			$('#modalConsultaAPI .btn-close').prop('disabled', false);
+			$('#modalConsultaAPI .modal-dialog ')
+				.addClass('modal-xl')
+				.removeClass('modal-dialog-centered')
+		})
+	}
+
+</script>
+
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Consulta vExpenses</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12" id="conteudoAPI">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

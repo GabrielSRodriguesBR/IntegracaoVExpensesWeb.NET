@@ -1,0 +1,81 @@
+﻿
+@model List<IntegracaoVExpensesWeb.Models.RelatorioModel>
+
+@if (Model.Count == 0)
+{
+    <div class="col-md-12 model-zero">
+        <span>Nenhum resultado encontrado</span>
+    </div>
+}
+else
+{
+    <table class="table table-small table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th>Descrição</th>
+                <th>Observação</th>
+                <th>Data Pagamento</th>
+                <th>DocEntry</th>
+                <th>Data Integração</th>
+                <th>Status Integração</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="relatorioId parentContent" data-id="@item.ID">
+                    <td class="parentIcon"><i class="fa fa-angle-right"></i></td>
+                    <td>@item.RelatorioId</td>
+                    <td>@item.Usuario</td>
+                    <td>@item.Descricao</td>
+                    <td>@item.Observacao</td>
+                    <td>@item.DataPagamento?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.DocEntry</td>
+                    <td>@item.DataIntegracao.ToString("dd/MM/yyyy")</td>
+                    <td class="@Html.Raw(item.DocEntry == null ? "tagNIntegrado" : "tagIntegrado")"></td>
+                </tr>
+                <tr class="childContent">
+                    <td colspan="9">
+                        <div class="col-md-12">
+                            <table class="table table-small table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Data</th>
+                                        <th>Título</th>
+                                        <th style="width: 90px;">Valor</th>
+                                        <th>Observação</th>
+                                        <th>Tipo</th>
+                                        <th>Tipo ID</th>
+                                        <th>CC</th>
+                                        <th class="text-center">Url</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var despesa in item.Despesas)
+                                    {
+                                        <tr>
+                                            <td>@despesa.ID</td>
+                                            <td>@despesa.Data.ToString("dd/MM/yyyy")</td>
+                                            <td>@despesa.Titulo</td>
+                                            <td>@String.Format("{0:C}", @despesa.Valor)</td>
+                                            <td class="truncate-text">@Html.Raw(!String.IsNullOrEmpty(despesa.Observacao) ? despesa.Observacao : "--")</td>
+                                            <td>@despesa.Tipo</td>
+                                            <td>@despesa.TipoIdSAP</td>
+                                            <td>@despesa.CentroCusto</td>
+                                            <td class="text-center"><a href="@despesa.URL" target="_blank"><i class="fa fa-eye"></i> Visualizar</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}

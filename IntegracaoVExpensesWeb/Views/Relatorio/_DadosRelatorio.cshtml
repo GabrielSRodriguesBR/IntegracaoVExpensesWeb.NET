@@ -1,0 +1,52 @@
+﻿@using System.Globalization
+@using IntegracaoVExpensesWeb.Business.Utils
+@model List<IntegracaoVExpensesWeb.Models.RelatorioModel>
+
+@{
+    bool pendenciaIntegracao = Model.Any(s => s.DocEntry == null);
+    int mes = Model.FirstOrDefault().DataIntegracao.Month;
+    int ano = Model.FirstOrDefault().DataIntegracao.Year;
+    string key = $"{mes}_{ano}";
+    CultureInfo culturePTBR = new CultureInfo("pt-BR");
+    string nomeDoMes = culturePTBR.DateTimeFormat.GetMonthName(mes).Capitalize();
+}
+<div class="col-md-12 tabs">
+    <ul class="nav nav-pills mb-3" id="pills-tab_@key" role="tablist">
+        @if (pendenciaIntegracao)
+        {
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active nav-pendentes" id="pills-pendentes-tab_@key" data-bs-toggle="pill" data-bs-target="#pills-pendentes_@key" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Aguardando Integração
+                </button>
+            </li>
+        }
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link @Html.Raw(!pendenciaIntegracao ? "active" : "") nav-integrados" id="pills-integrados-tab_@key" data-bs-toggle="pill" data-bs-target="#pills-integrados_@key" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
+                <i class="fa-solid fa-circle-check"></i> Integrados
+            </button>
+        </li>
+
+    </ul>
+    <div class="tab-content" id="@Html.Raw($"pills-tab_{@key}Content")">
+        @if (pendenciaIntegracao)
+        {
+            <div class="tab-pane fade show active" id="pills-pendentes_@key" role="tabpanel" aria-labelledby="pills-pendentes-tab">
+                <div class="button-container">
+                    <button class="btn btn-outline-danger" onclick="IntegrarSAP('@key')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Integrar despesas de <b>@ano - @nomeDoMes</b> no SAP</button>
+                </div>
+                <div class="table_pendentes_@key">
+                    @Html.Partial("_TabelaRelatorio", Model.Where(s => s.DocEntry == null).ToList())
+                </div>
+            </div>
+        }
+
+        <div class="tab-pane fade @Html.Raw(!pendenciaIntegracao ? "show active" : "") " id="pills-integrados_@key" role="tabpanel" aria-labelledby="pills-integrados-tab">
+            @Html.Partial("_TabelaRelatorio", Model.Where(s => s.DocEntry != null).ToList())
+        </div>
+    </div>
+</div>
+
+
+
+
