@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SapService", "SapService\SapService.csproj", "{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {340D6AD1-1C4F-4D72-96A7-5F2FF36EB746}
+	EndGlobalSection
+EndGlobal
