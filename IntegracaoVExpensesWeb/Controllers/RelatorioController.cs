@@ -6,14 +6,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using IntegracaoVExpensesWeb.Business;
+using System.Web.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace IntegracaoVExpensesWeb.Controllers
 {
     public class RelatorioController : Controller
     {
         private DBContext db = new DBContext();
-        // GET: Relatorio
-   
 
         public ActionResult Index(RelatorioFilterViewModel filter)
         {
@@ -65,5 +67,73 @@ namespace IntegracaoVExpensesWeb.Controllers
 
             return View(filter);
         }
-    }
+
+		public ActionResult _DadosRelatorio(int mes, int ano)
+		{
+			var query = db.Relatorios.Include(s => s.Despesas).Where(s => s.DataIntegracao.Month == mes && s.DataIntegracao.Year == ano).ToList();
+			return PartialView(query);
+		}
+
+
+		public async Task<ActionResult> IntegrarPagamentos(List<int> listaRelatorios, DateTime dtPagamento)
+		{
+
+			try
+			{
+				List<RelatorioModel> relatoriosPagar = db.Relatorios
+					.Include(s => s.Despesas)
+					.Where(s => s.DocEntry != null && s.DataPagamento == null && listaRelatorios.Any(a => a == s.RelatorioId))
+					.ToList();
+
+				if (relatoriosPagar.Count == 0)
+					return Json(new { status = false, text = "Atenção", exception = "Nenhuma despesa pendente de pagamento, recarregue a página e tente novamente" });
+
+				foreach (var relatorio in relatoriosPagar)
+				{
+					
+					dynamic result = await new VExpensesAPI().SendPaymentAsync<dynamic>(relatorio.RelatorioId, dtPagamento);
+					if (!((bool)(result.success ?? false)))
+						return Json(new { status = false, text = $"Relatório:{relatorio.RelatorioId}", exception = String.Format("{0} </br> {1}", result.message?.ToString(), JsonConvert.SerializeObject(result?.data ?? null)) });
+
+					relatorio.DataPagamento = dtPagamento;
+				}
+				db.SaveChanges();
+
+				return Json(new { status = true, text = "Pagamentos informados com sucesso!" });
+			}
+			catch (Exception e)
+			{
+				return Json(new { status = false, text = "Erro interno ao realizar o pagamento", exception = e.ToString() });
+			}
+
+		}
+
+
+		public async Task<ActionResult> IntegrarDespesasSAP(List<int> listaRelatorios)
+		{
+			try
+			{
+
+				List<RelatorioModel> relatoriosIntegrar = db.Relatorios
+					.Include(s => s.Despesas)
+					.Where(s => s.DocEntry == null && listaRelatorios.Any(a => a == s.RelatorioId))
+					.ToList();
+
+				if (relatoriosIntegrar.Count == 0)
+					return Json(new { status = false, text = "Nenhuma despesa pendente de integração com o SAP, recarregue a página e tente novamente" });
+
+                SapAPI sap = new SapAPI();
+                var integracaoResult = await sap.IntegrarDespesas(listaRelatorios);
+
+				return Json(new { integracaoResult.status, integracaoResult.text, integracaoResult.exception }, JsonRequestBehavior.AllowGet);
+
+			}
+			catch (Exception e)
+			{
+				return Json(new { status = false, text = "Erro interno ao realizar a integração", exception = e.ToString() }, JsonRequestBehavior.AllowGet);
+			}
+
+
+		}
+	}
 }

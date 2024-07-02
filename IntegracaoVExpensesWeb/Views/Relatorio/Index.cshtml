@@ -6,6 +6,7 @@
 }
 
 
+
 <div class="boxConteiner">
 
     <div class="boxTitle">
@@ -85,6 +86,7 @@ else
     {
         int ano = item.FirstOrDefault().DataIntegracao.Year;
         int mes = item.FirstOrDefault().DataIntegracao.Month;
+        string key = $"comp_{mes}_{ano}";
         CultureInfo culturePTBR = new CultureInfo("pt-BR");
         string nomeDoMes = culturePTBR.DateTimeFormat.GetMonthName(mes).Capitalize();
         <div class="monthConteiner">
@@ -93,7 +95,7 @@ else
                 @ano - @nomeDoMes
             </div>
 
-            <div class="monthContent">
+            <div class="monthContent" id="@key" data-mes="@mes" data-ano="@ano">
                 @Html.Partial("_DadosRelatorio", item.Select(s => s).ToList())
             </div>
         </div>

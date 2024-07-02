@@ -20,9 +20,6 @@ namespace IntegracaoVExpensesWeb.Business.DBContext
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
-            //modelBuilder.Entity<RelatorioModel>().HasKey(r => r.ID);
-
             modelBuilder.Entity<RelatorioModel>()
        .        HasKey(r => r.RelatorioId);
 
@@ -31,19 +28,9 @@ namespace IntegracaoVExpensesWeb.Business.DBContext
 
             modelBuilder.Entity<RelatorioModel>()
                 .HasMany(r => r.Despesas)
-                .WithRequired(d => d.Relatorio)  // Ou .WithOne(d => d.Relatorio) dependendo da versão do Entity Framework
+                .WithRequired(d => d.Relatorio)  
                 .HasForeignKey(d => d.RelatorioId)
                 .WillCascadeOnDelete(false);
-
-          
-
-
-
-            //modelBuilder.Entity<RelatorioModel>()
-            //    .HasMany(r => r.Despesas)
-            //    .WithRequired(d => d.Relatorio)
-            //    .HasForeignKey(d => d.RelatorioId);
-
 
 
             base.OnModelCreating(modelBuilder);

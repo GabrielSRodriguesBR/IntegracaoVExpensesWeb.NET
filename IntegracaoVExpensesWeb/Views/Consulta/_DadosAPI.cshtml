@@ -1,6 +1,23 @@
 ﻿@model IntegracaoVExpensesWeb.Business.VExpensesModel
 <script>
-	const resultadosAPI = @Html.Raw(ViewBag.resultadosAPI);
+
+    const formatNumberToBrazilian = (number) =>  {
+        return number.toString().replace('.', ',');
+    }
+
+    const formatObjectNumbersToBrazilian = (obj) => {
+        for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (typeof obj[key] === 'number') {
+                    obj[key] = formatNumberToBrazilian(obj[key]);
+                } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    formatObjectNumbersToBrazilian(obj[key]);
+                }
+            }
+        }
+    }
+    const resultadosAPI = @Html.Raw(ViewBag.resultadosAPI);
+    formatObjectNumbersToBrazilian(resultadosAPI)
 </script>
 <div>
 

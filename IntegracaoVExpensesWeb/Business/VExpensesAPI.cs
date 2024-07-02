@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -35,7 +37,44 @@ namespace IntegracaoVExpensesWeb.Business
                 return result;
             }
         }
-    }
+
+		public async Task<T> SendPaymentAsync<T>(int id, DateTime dtPagamento)
+		{
+			string fullUrl = _apiConfig.Endereco.TrimEnd('/') + "/" + String.Format(_apiConfig.EndPoints.Pagamento, id).TrimStart('/');
+
+			var body = new
+			{
+				payment_date = dtPagamento.ToString("yyyy-MM-dd HH:mm:ss")
+			};
+			var json = JsonConvert.SerializeObject(body);
+
+			try
+			{
+				var resultApi =  _httpClient.Put(fullUrl, json, new Dictionary<string, string>() { { "Authorization", _apiConfig.TokenAcesso } });
+				if (!resultApi.status)
+					throw new Exception($"{resultApi.text}: {resultApi.exception}");
+				else
+				{
+					T result = JsonConvert.DeserializeObject<T>(resultApi.data);
+					return result;
+				}
+			}
+			catch (HttpRequestException ex) 
+			{
+				Console.WriteLine($"HttpRequestException: {ex.Message}");
+				if (ex.InnerException != null)
+				{
+					Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+				}
+
+				throw new Exception("Erro ao chamar a API VExpenses", ex);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Erro ao chamar a API VExpenses", ex);
+			}
+		}
+	}
 
 
 

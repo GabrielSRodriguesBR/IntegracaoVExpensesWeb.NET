@@ -284,3 +284,6 @@ body {
     border: 1px solid #dbdbdb;
     display: none;
 }
+.bootbox-body {
+    word-break: break-all;
+}

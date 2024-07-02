@@ -59,5 +59,48 @@ namespace HttpCurl
             }
 
         }
-    }
+
+		public (bool status, string text, string exception, string data) Put(string url, string payload, Dictionary<string, string> headers)
+		{
+			Curl.GlobalInit((int)CURLinitFlag.CURL_GLOBAL_ALL);
+			using (Easy easy = new Easy())
+			{
+				// Configura a URL da requisição
+				easy.SetOpt(CURLoption.CURLOPT_URL, url);
+				// Configura o método PUT
+				easy.SetOpt(CURLoption.CURLOPT_CUSTOMREQUEST, "PUT");
+				// Configura os cabeçalhos HTTP da requisição
+				Slist httpHeaders = new Slist();
+				foreach (var header in headers)
+				{
+					httpHeaders.Append($"{header.Key}: {header.Value}");
+				}
+				httpHeaders.Append("Content-Type: application/json");
+				easy.SetOpt(CURLoption.CURLOPT_HTTPHEADER, httpHeaders);
+				easy.SetOpt(CURLoption.CURLOPT_SSL_VERIFYPEER, false);
+				// Configura o payload da requisição
+				easy.SetOpt(CURLoption.CURLOPT_POSTFIELDS, payload);
+
+				// Configura a função de callback para processar os dados recebidos
+				easy.SetOpt(CURLoption.CURLOPT_WRITEFUNCTION, new WriteFunction(OnWriteData));
+
+				StringBuilder data = new StringBuilder();
+				easy.SetOpt(CURLoption.CURLOPT_WRITEDATA, data);
+
+				// Executa a requisição
+				CURLcode res = easy.Perform();
+
+				if (res != CURLcode.CURLE_OK)
+				{
+					return (false, "Erro na requisição", res.ToString(), "");
+				}
+				else
+				{
+					return (true, "", res.ToString(), data.ToString());
+
+				}
+			}
+		}
+
+	}
 }

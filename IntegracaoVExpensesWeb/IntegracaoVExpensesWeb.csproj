@@ -164,6 +164,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Business\DBContext\DBContext.cs" />
+    <Compile Include="Business\SapAPI.cs" />
     <Compile Include="Business\Utils\AppSettingsHandles.cs" />
     <Compile Include="Business\Utils\StringExtensions.cs" />
     <Compile Include="Business\VExpensesAPI.cs" />
