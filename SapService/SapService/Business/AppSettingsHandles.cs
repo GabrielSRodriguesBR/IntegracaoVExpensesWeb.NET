@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
 
 namespace SapService.Business.Utils
 {
 
-    public class ConfigReader
+	public class ConfigReader
     {
     
         public SapConfig ReadSapConfig()

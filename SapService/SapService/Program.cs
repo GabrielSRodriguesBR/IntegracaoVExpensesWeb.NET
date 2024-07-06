@@ -1,13 +1,11 @@
-﻿using Microsoft.Owin.Hosting;
-using SelfHost_WebApi;
-using System;
+﻿using System;
 using System.Configuration.Install;
 using System.Reflection;
 using System.ServiceProcess;
 
 namespace SapService
 {
-    internal class Program
+	internal class Program
     {
         static void Main(string[] args)
         {

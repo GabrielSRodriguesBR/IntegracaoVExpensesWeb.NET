@@ -1,14 +1,9 @@
 ﻿using IntegracaoVExpensesWeb.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Web;
 
 namespace IntegracaoVExpensesWeb.Business.DBContext
 {
-    public class DBContext : DbContext
+	public class DBContext : DbContext
     {
         public DBContext() : base("name=DefaultConnection")
         {

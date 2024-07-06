@@ -1,11 +1,6 @@
-﻿using CriptoPass;
-using SAPbobsCOM;
+﻿using SAPbobsCOM;
 using SapService.Business.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SapService.Business
 {

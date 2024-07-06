@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Owin.Hosting;
+﻿using Microsoft.Owin.Hosting;
 using SelfHost_WebApi;
+using System;
+using System.Configuration;
+using System.ServiceProcess;
 
 namespace SapService
 {
-    partial class SapService : ServiceBase
+	partial class SapService : ServiceBase
     {
         private IDisposable webApp;
         public SapService()

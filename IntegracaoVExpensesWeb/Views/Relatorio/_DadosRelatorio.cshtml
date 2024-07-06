@@ -12,8 +12,12 @@
     }
 
 
+    const GetRelatorios = (key) => {
+        return $(`.table_pendentes_${key} table .relatorioId`).map((i, e) => { return $(e).data('id') }).get();
+    }
+
     const IntegrarDespesasSAP = (key) => {
-		const listaRelatorios = $(`.table_pendentes_${key} table .relatorioId`).map((i, e) => { return $(e).data('id') }).get()
+        const listaRelatorios = GetRelatorios(key);
 		if (listaRelatorios.length > 0) {
 
 			bootbox.confirm({
@@ -71,9 +75,28 @@
 
 	}
 
+    const ExportarDespesas = (key) => {
+        const listaRelatorios = GetRelatorios(key);
+        if (listaRelatorios.length > 0) {
+
+            var $form = $('<form>', {
+                action: '@Url.Action("ExportarDespesas")',
+                method: 'post'
+            });
+            listaRelatorios.forEach(function (id) {
+                var $input = $('<input>', {
+                    type: 'hidden',
+                    name: 'listaRelatorios',
+                    value: id
+                });
+                $form.append($input);
+            });
+            $form.appendTo('body').submit().remove();
+        }
+    }
 
     const IntegrarPagamentos =  (key) =>  {
-		const listaRelatorios = $(`.table_pendentes_pag_${key} table .relatorioId`).map((i, e) => { return $(e).data('id') }).get()
+        const listaRelatorios = GetRelatorios(key);
 		if (listaRelatorios.length > 0) {
 
 			const getCurrentDate = () => {
@@ -164,6 +187,7 @@
             <div class="tab-pane fade show active" id="pills-pendentes_@key" role="tabpanel" aria-labelledby="pills-pendentes-tab">
                 <div class="button-container">
                     <button class="btn btn-outline-danger" onclick="IntegrarDespesasSAP('@key')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Integrar despesas de <b>@ano - @nomeDoMes</b> no SAP</button>
+                    <button class="btn btn-outline-success" onclick="ExportarDespesas('@key')"><i class="fa-regular fa-file-excel"></i> Exportar despesas de <b>@ano - @nomeDoMes</b></button>
                 </div>
                 <div class="table_pendentes_@key">
                     @Html.Partial("_TabelaRelatorio", Model.Where(s => s.DocEntry == null).ToList())

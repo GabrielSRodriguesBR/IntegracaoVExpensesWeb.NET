@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Web;
 
 namespace IntegracaoVExpensesWeb.Business.Utils
 {
-    public static class StringExtensions
+	public static class StringExtensions
     {
         /// <summary>
         /// Capitaliza uma string

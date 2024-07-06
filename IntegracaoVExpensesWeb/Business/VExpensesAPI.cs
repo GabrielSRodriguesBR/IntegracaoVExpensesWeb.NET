@@ -3,16 +3,13 @@ using IntegracaoVExpensesWeb.Business.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace IntegracaoVExpensesWeb.Business
 {
 
-    public class VExpensesAPI
+	public class VExpensesAPI
     {
         private readonly HttpClientCurl _httpClient;
         private readonly VExpensesConfig _apiConfig;

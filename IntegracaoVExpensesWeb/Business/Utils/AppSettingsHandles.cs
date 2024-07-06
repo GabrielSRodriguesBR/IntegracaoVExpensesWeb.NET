@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
 
 namespace IntegracaoVExpensesWeb.Business.Utils
 {
-    public class VExpensesConfig
+	public class VExpensesConfig
     {
         public string Endereco { get; set; }
         public string TokenAcesso { get; set; }

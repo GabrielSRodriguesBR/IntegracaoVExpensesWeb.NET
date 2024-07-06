@@ -1,11 +1,7 @@
-﻿using IntegracaoVExpensesWeb.Business;
-using IntegracaoVExpensesWeb.Business.DBContext;
-using SAPbobsCOM;
+﻿using SAPbobsCOM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SapService.Business.Integracao
 {

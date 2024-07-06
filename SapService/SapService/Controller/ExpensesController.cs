@@ -1,6 +1,5 @@
 ﻿using IntegracaoVExpensesWeb.Business.DBContext;
 using IntegracaoVExpensesWeb.Models;
-using Microsoft.Owin.Hosting.Services;
 using Newtonsoft.Json;
 using SapService.Business.Integracao;
 using System;

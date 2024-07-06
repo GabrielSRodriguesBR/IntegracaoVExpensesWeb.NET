@@ -7,19 +7,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace IntegracaoVExpensesWeb.Controllers
 {
-    public class ConsultaController : Controller
+	public class ConsultaController : Controller
     {
         private DBContext db = new DBContext();
-        public ActionResult ModalBuscarDadosApi()
+
+		/// <summary>
+		/// Renderiza a modal que faz e exibe os resultados da api do vExpenses
+		/// </summary>
+		/// <returns>View com os resultados</returns>
+		public ActionResult ModalBuscarDadosApi()
         {
             return PartialView("_ModalBuscarDadosApi");
         }
 
+        /// <summary>
+        /// Faz a chamada da api do vExpenses e exibe em tela
+        /// </summary>
+        /// <returns>View com os resultados</returns>
         public async Task<ActionResult> ChamarAPI()
         {
             VExpensesModel resultadoAPI = await new VExpensesAPI().GetApiDataAsync<VExpensesModel>();
@@ -27,7 +35,11 @@ namespace IntegracaoVExpensesWeb.Controllers
             return PartialView("_DadosAPI", resultadoAPI);
         }
 
-       
+       /// <summary>
+       /// Salva os resultados da api do vExpenses na base de dados
+       /// </summary>
+       /// <param name="resultadosAPI">Objeto vExpenses</param>
+       /// <returns>JSON de resultado da operação</returns>
         public ActionResult SalvarResultadosApi(VExpensesModel resultadosAPI)
         {
             if (resultadosAPI == null)
@@ -91,7 +103,7 @@ namespace IntegracaoVExpensesWeb.Controllers
                 text = "Esses resultados já foram salvos na base de dados.";
 
 
-            return Json(new { status = true, text = text });
+            return Json(new { status = true, text = text }, JsonRequestBehavior.AllowGet);
         }
 
     }
