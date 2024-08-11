@@ -6,6 +6,10 @@ namespace SapService.Business.Utils
 	public class ConfigReader
     {
     
+        /// <summary>
+        /// Converte as configurações do app.config em um objeto para ser usado no sistema
+        /// </summary>
+        /// <returns></returns>
         public SapConfig ReadSapConfig()
         {
             var config = new SapConfig();

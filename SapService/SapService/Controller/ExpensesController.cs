@@ -56,6 +56,12 @@ namespace SapService.Controller
 
 			}
 		}
+
+		/// <summary>
+		/// Integra as despesas no SAP
+		/// </summary>
+		/// <param name="listaRelatorios">Lista de relatórios que vão ser integrados</param>
+		/// <returns></returns>
 		[HttpPost]
 		public (bool status, string text, string exception) Add(List<int> listaRelatorios)
 		{
@@ -67,7 +73,8 @@ namespace SapService.Controller
 					.Include(s => s.Despesas)
 					.Where(s => s.DocEntry == null && listaRelatorios.Any(a => a == s.RelatorioId))
 					.ToList()
-					.Where(s => s.Despesas.Any()).ToList(); //SAP sõ deixa integrar relatórios com itens
+					.Where(s => s.Despesas.Any()) //SAP não deixa integrar relatórios sem itens
+					.ToList(); 
 
 					if (relatoriosIntegrar.Count == 0)
 						return (false, "Nenhuma despesa pendente de integração com o SAP, recarregue a página e tente novamente", "");

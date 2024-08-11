@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CriptoPass", "CriptoPass\Cr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SapService", "SapService\SapService\SapService.csproj", "{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CriptoPassUI", "CriptoPassUI\CriptoPassUI.csproj", "{09E5C4E4-0E6D-4B6C-82B0-D4A634B6EFB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A0C3BF6-0863-40F5-82CB-DA40E9ADB2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09E5C4E4-0E6D-4B6C-82B0-D4A634B6EFB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09E5C4E4-0E6D-4B6C-82B0-D4A634B6EFB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09E5C4E4-0E6D-4B6C-82B0-D4A634B6EFB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09E5C4E4-0E6D-4B6C-82B0-D4A634B6EFB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

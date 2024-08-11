@@ -16,6 +16,10 @@ namespace SapService.Business
 			_sapConfig = new ConfigReader().ReadSapConfig();
 		}
 
+		/// <summary>
+		/// Faz a conexão com o SAP
+		/// </summary>
+		/// <exception cref="Exception"></exception>
 		public void Connect()
 		{
 			_company.Server = _sapConfig.Server;
@@ -39,6 +43,9 @@ namespace SapService.Business
 		}
 
 
+		/// <summary>
+		/// Disconecta do SAP
+		/// </summary>
 		public void Disconnect()
 		{
 			if (_company != null && _company.Connected)
@@ -47,6 +54,10 @@ namespace SapService.Business
 			}
 		}
 
+		/// <summary>
+		/// Formata a mensagem de erro do SAP
+		/// </summary>
+		/// <returns></returns>
 		public string HandleError()
 		{
 			int lErrCode;
@@ -55,6 +66,10 @@ namespace SapService.Business
 			return $"{lErrCode} - {sErrMsg}";
 		}
 
+		/// <summary>
+		/// Obtem o último DocEntry gerado
+		/// </summary>
+		/// <returns></returns>
 		public int GetDocEntry()
 		{
 			string docEntry = "";
@@ -64,6 +79,10 @@ namespace SapService.Business
 			return parsedDocEntry;
 		}
 
+		/// <summary>
+		/// Obtém o objeto da Compania
+		/// </summary>
+		/// <returns></returns>
 		public Company GetCompany()
 		{
 			return _company;

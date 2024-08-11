@@ -20,7 +20,11 @@ namespace IntegracaoVExpensesWeb.Business.Utils
 
     public class ConfigReader
     {
-        public VExpensesConfig ReadVExpensesConfig()
+		/// <summary>
+		/// Converte as configurações do web.config em um objeto para ser usado no sistema
+		/// </summary>
+		/// <returns></returns>
+		public VExpensesConfig ReadVExpensesConfig()
         {
             var config = new VExpensesConfig();
 

@@ -20,6 +20,12 @@ namespace IntegracaoVExpensesWeb.Business
             _apiConfig = new ConfigReader().ReadVExpensesConfig();
         }
 
+        /// <summary>
+        /// Consulta relatórios na api do vExpenses
+        /// </summary>
+        /// <typeparam name="T">Objeto de desserialização que interpreta o retorno da API</typeparam>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<T> GetApiDataAsync<T>()
         {
             string fullUrl = _apiConfig.Endereco.TrimEnd('/') + "/" + _apiConfig.EndPoints.Consulta.TrimStart('/');
@@ -35,6 +41,14 @@ namespace IntegracaoVExpensesWeb.Business
             }
         }
 
+		/// <summary>
+		/// Envia pagamentos para a api do vExpenses
+		/// </summary>
+		/// <typeparam name="T">Objeto de desserialização que interpreta o retorno da API</typeparam>
+		/// <param name="id">id da despesa</param>
+		/// <param name="dtPagamento"> data de pagamento</param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
 		public async Task<T> SendPaymentAsync<T>(int id, DateTime dtPagamento)
 		{
 			string fullUrl = _apiConfig.Endereco.TrimEnd('/') + "/" + String.Format(_apiConfig.EndPoints.Pagamento, id).TrimStart('/');

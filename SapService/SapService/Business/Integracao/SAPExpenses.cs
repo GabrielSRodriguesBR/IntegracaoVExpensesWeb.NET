@@ -13,8 +13,13 @@ namespace SapService.Business.Integracao
 		public SAPExpenses()
 		{
 			_sap = new SapSDKService();
-			_sap.Connect();
+			_sap.Connect(); //chama a conexão com o SAP ao instanciar o objeto
 		}
+		/// <summary>
+		/// Integra uma despesa no SAP
+		/// </summary>
+		/// <param name="expense"></param>
+		/// <returns></returns>
 		public (bool status, string text, string exception, int docEntry) Integrar(ExpenseModel expense)
 		{
 
@@ -82,6 +87,10 @@ namespace SapService.Business.Integracao
 			}
 		}
 
+		/// <summary>
+		/// Obtém o último dia do mês atual
+		/// </summary>
+		/// <returns></returns>
 		private DateTime GetUltimoDiaDoMesAtual()
 		{
 			DateTime dataAtual = DateTime.Now;
@@ -90,6 +99,10 @@ namespace SapService.Business.Integracao
 			return ultimoDiaDoMes;
 		}
 
+
+		#region Dispose
+
+		//O código abaixo garante que o objeto SAPExpenses faça a deconexão com o SAP e seja eliminado no fim de sua vida útil
 		protected virtual void Dispose(bool disposing)
 		{
 			if (!_disposed)
@@ -117,6 +130,8 @@ namespace SapService.Business.Integracao
 		{
 			Dispose(false);
 		}
+
+		#endregion
 
 	}
 

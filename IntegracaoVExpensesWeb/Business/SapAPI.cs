@@ -17,6 +17,12 @@ namespace IntegracaoVExpensesWeb.Business
 			_httpClient.BaseAddress = new Uri(ConfigurationManager.AppSettings["ServiceAddress"]);	
 		}
 
+		/// <summary>
+		/// Integra as despesas no SAP usando o SapService
+		/// </summary>
+		/// <param name="listaRelatorios">Lista de relatórios que vão ser integrados</param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
 		public async Task<(bool status, string text, string exception)> IntegrarDespesas(List<int> listaRelatorios)
 		{
 
