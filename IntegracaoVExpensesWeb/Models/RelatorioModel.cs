@@ -15,7 +15,10 @@ namespace IntegracaoVExpensesWeb.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Column("DATA_INTEGRACAO")]
-        public DateTime DataIntegracao { get; set; }
+        public DateTime DataIntegracao { get; set; }       
+        
+        [Column("DATA_APROVACAO")]
+        public DateTime DataAprovacao { get; set; }
 
         [Key]
         [Column("RELATORIO_ID", Order = 1)]

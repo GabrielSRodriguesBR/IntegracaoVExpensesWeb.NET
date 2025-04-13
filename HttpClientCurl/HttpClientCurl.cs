@@ -33,7 +33,24 @@ namespace HttpCurl
                 Slist httpHheaders = new Slist();
                 httpHheaders.Append("Accept: application/json");
                 httpHheaders.Append("User-Agent: Mozilla/5.0");
-                httpHheaders.Append("Authorization: saSgIZa3MY07Yu5ePKIFf8Z3p41AO6Vv75VW7RXoP9Bq8eAHX638qbnnRFj4");
+
+
+                Slist httpHeaders = new Slist();
+                foreach (var header in headers)
+                {
+
+                   var headerInfo = $"{header.Key}: {header.Value}";
+                   httpHeaders.Append(headerInfo);
+                }
+
+                if(headers.TryGetValue("Authorization", out string auth))
+                {
+                    httpHheaders.Append($"Authorization: {auth}");
+                }
+
+                
+
+
                 easy.SetOpt(CURLoption.CURLOPT_HTTPHEADER, httpHheaders);
                 easy.SetOpt(CURLoption.CURLOPT_SSL_VERIFYPEER, false);
 

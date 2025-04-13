@@ -20,7 +20,7 @@ namespace SapService
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Clear();
-                Console.WriteLine("Iniciando vExpenses - Integração SAP...");
+                Console.WriteLine("Iniciando VExpenses - Integração SAP...");
             }
             OnStart(args);
 

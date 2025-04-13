@@ -18,7 +18,7 @@ namespace SapService.Controller
 			using (SAPExpenses Integracao = new SAPExpenses())
 			{
 				ExpenseModel expense = new ExpenseModel();
-				expense.memo = $"Teste de integração vExpenses: {DateTime.Now.ToString("dd/MM/yyyy")}";
+				expense.memo = $"Teste de integração VExpenses: {DateTime.Now.ToString("dd/MM/yyyy")}";
 				expense.RelatorioID = 99;
 				expense.ref1 = "99";
 				expense.ref2 = "Teste Integração";

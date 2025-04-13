@@ -9,7 +9,40 @@
     <link href="~/Content/lib/fontawesome-free-6.5.2-web/css/all.min.css" rel="stylesheet" />
     <link href="~/Content/lib/toastr/toastr.min.css" rel="stylesheet" />
     <link href="~/Content/css/site.css" rel="stylesheet" />
+    <script src="~/Content/lib/jquery/dist/jquery.min.js"></script>
     <style>
+
+        input[type="checkbox"] {
+            width: 23px;
+            height: 23px;
+            cursor: pointer;
+        }
+
+        .op-btn {
+            width: 120px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+            .op-btn small {
+                text-align: justify !important;
+            }
+
+        .icon-nok, .icon-ok {
+            font-size: 15pt;
+        }
+
+        .icon-nok {
+            color: #c92a2a;
+        }
+
+        .icon-ok {
+            color: #36890d;
+        }
+
+
         a.navbar-brand {
             white-space: normal;
             text-align: center;
@@ -56,7 +89,6 @@
             white-space: nowrap;
             line-height: 60px;
         }
-
     </style>
 </head>
 <body>
@@ -120,14 +152,14 @@
                 Alert("Ocorreu um erro: " + error, false);
             }).always(function () {
                 $('button').prop('disabled', false);
-            });    
+            });
 
-         
+
         }
 
 
     </script>
-    <script src="~/Content/lib/jquery/dist/jquery.min.js"></script>
+
 
     <script src="~/Content/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/Content/lib/toastr/toastr.min.js"></script>

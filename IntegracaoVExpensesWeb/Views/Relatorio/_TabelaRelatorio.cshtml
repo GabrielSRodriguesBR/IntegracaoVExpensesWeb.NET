@@ -8,36 +8,80 @@
 }
 else
 {
+    <div class="d-flex flex-wrap gap-2 mb-3" style=" margin-top: 10px;">
+        <button class="btn btn-warning op-btn" style="width: 120px;" onclick="integrarSAP()">
+            <i class="fa fa-plug d-block mb-1"></i>
+            <small>Integrar SAP</small>
+        </button>
+
+        <button class="btn btn-primary op-btn" style="width: 120px; " onclick="informarPagamentos()">
+            <i class="fa fa-credit-card d-block mb-1"></i>
+            <small>Informar Pagamentos</small>
+        </button>
+
+        <button class="btn btn-success op-btn" style="width: 120px; " onclick="exportarExcel()">
+            <i class="fa-regular fa-file-excel d-block mb-1"></i>
+            <small>Exportar Excel</small>
+        </button>
+    </div>
+
+
+
     <table class="table table-small table-hover">
         <thead>
             <tr>
+
+                <th><input type="checkbox" class="checkAll" data-id="@Model.FirstOrDefault().RelatorioId" /></th>
                 <th></th>
                 <th>ID</th>
                 <th>Usuário</th>
                 <th>Descrição</th>
-                <th>Observação</th>
+                @*<th>Observação</th>*@
                 <th>Data Pagamento</th>
                 <th>DocEntry</th>
+                <th>Data Aprovação</th>
                 <th>Data Integração</th>
-                <th>Status Integração</th>
+                <th>Integrado no SAP</th>
+                <th>Pago no VExpenses</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr class="relatorioId parentContent" data-id="@item.RelatorioId">
+                    <td class="notClick"><input type="checkbox" class="checkItem" value="@item.RelatorioId" /></td>
                     <td class="parentIcon"><i class="fa fa-angle-right"></i></td>
                     <td>@item.RelatorioId</td>
                     <td>@item.Usuario</td>
                     <td>@item.Descricao</td>
-                    <td>@item.Observacao</td>
-                    <td>@Html.Raw(item.DataPagamento?.ToString("dd/MM/yyyy"))</td>
-                    <td>@item.DocEntry</td>
-                    <td>@item.DataIntegracao.ToString("dd/MM/yyyy")</td>
-                    <td class="@Html.Raw(item.DocEntry == null ? "tagNIntegrado" : "tagIntegrado")"></td>
+                    @*<td>@item.Observacao</td>*@
+                    <td>@Html.Raw(item.DataPagamento?.ToString("dd/MM/yyyy") ?? "-")</td>
+                    <td>@Html.Raw(item.DocEntry?.ToString() ?? "-")</td>
+                    <td>@Html.Raw(item.DataAprovacao.ToString("dd/MM/yyyy"))</td>
+                    <td>@Html.Raw(item.DataIntegracao.ToString("dd/MM/yyyy"))</td>
+                    <td class="text-center">
+                        @if (item.DocEntry != null)
+                        {
+                            <span class="icon-ok"><i class="fa-solid fa-circle-check"></i></span>
+                        }
+                        else
+                        {
+                            <span class="icon-nok"><i class="fa-solid fa-circle-xmark"></i></span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (item.DataPagamento != null)
+                        {
+                            <span class="icon-ok"><i class="fa-solid fa-circle-check"></i></span>
+                        }
+                        else
+                        {
+                            <span class="icon-nok"><i class="fa-solid fa-circle-xmark"></i></span>
+                        }
+                    </td>
                 </tr>
                 <tr class="childContent">
-                    <td colspan="9">
+                    <td colspan="11" style=" background: #f5f5f5;">
                         <div class="col-md-12">
                             <table class="table table-small table-hover">
                                 <thead>

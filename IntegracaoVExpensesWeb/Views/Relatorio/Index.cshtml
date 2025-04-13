@@ -6,6 +6,19 @@
 }
 <script>
 
+    $(() => {
+        // Quando o checkbox do cabeçalho for clicado
+        $('.checkAll').on('change', function () {
+            if ($(this).is(':checked')) {
+                $(this).closest('table').find(`.checkItem`).each((i, e) => $(e).prop('checked', true))
+            }
+            else {
+                $(this).closest('table').find(`.checkItem`).each((i, e) => $(e).prop('checked', false))
+            }
+        });
+
+    });
+
 
     const ReloadDados = (id) => {
 	    const mes = $(id).data('mes');
@@ -132,7 +145,7 @@
 				callback: function (dtPagamento) {
                     if (!dtPagamento) return;
                     let dialog = bootbox.dialog({
-                        message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Integrando pagamento no vExpenses...</p>',
+                        message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Integrando pagamento no VExpenses...</p>',
                         closeButton: false
                     });
 					$('button').prop('disabled', true);
@@ -219,7 +232,7 @@
     <button class="btn btn-primary" onclick="BuscarApi()">
         <i class="fa-solid fa-globe"></i>
         <i class="fa-solid fa-download"></i>
-        Consultar vExpenses
+        Consultar VExpenses
     </button>
 </div>
 
@@ -237,12 +250,12 @@ else
     </span>
 
     foreach (var item in Model.Relatorios
-                                            .GroupBy(s => new { s.DataIntegracao.Year, s.DataIntegracao.Month })
+                                            .GroupBy(s => new { s.DataAprovacao.Year, s.DataAprovacao.Month })
                                             .OrderByDescending(s => s.Key.Year)
                                             .ThenByDescending(s => s.Key.Month))
     {
-        int ano = item.FirstOrDefault().DataIntegracao.Year;
-        int mes = item.FirstOrDefault().DataIntegracao.Month;
+        int ano = item.FirstOrDefault().DataAprovacao.Year;
+        int mes = item.FirstOrDefault().DataAprovacao.Month;
         string key = $"comp_{mes}_{ano}";
         CultureInfo culturePTBR = new CultureInfo("pt-BR");
         string nomeDoMes = culturePTBR.DateTimeFormat.GetMonthName(mes).Capitalize();

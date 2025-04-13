@@ -36,9 +36,9 @@
             this.ServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
             this.ServiceProcessInstaller.Password = null;
             this.ServiceProcessInstaller.Username = null;
-            this.ServiceInstaller.Description = "Serviço responsável por integrar despesas vindas do vExpenses com o SAP";
-            this.ServiceInstaller.DisplayName = "vExpenses - Integração SAP";
-            this.ServiceInstaller.ServiceName = "vExpensesSAP";
+            this.ServiceInstaller.Description = "Serviço responsável por integrar despesas vindas do VExpenses com o SAP";
+            this.ServiceInstaller.DisplayName = "VExpenses - Integração SAP";
+            this.ServiceInstaller.ServiceName = "VExpensesSAP";
             this.ServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {

@@ -16,7 +16,7 @@ namespace IntegracaoVExpensesWeb.Controllers
         private DBContext db = new DBContext();
 
 		/// <summary>
-		/// Renderiza a modal que faz e exibe os resultados da api do vExpenses
+		/// Renderiza a modal que faz e exibe os resultados da api do VExpenses
 		/// </summary>
 		/// <returns>View com os resultados</returns>
 		public ActionResult ModalBuscarDadosApi()
@@ -25,7 +25,7 @@ namespace IntegracaoVExpensesWeb.Controllers
         }
 
         /// <summary>
-        /// Faz a chamada da api do vExpenses e exibe em tela
+        /// Faz a chamada da api do VExpenses e exibe em tela
         /// </summary>
         /// <returns>View com os resultados</returns>
         public async Task<ActionResult> ChamarAPI()
@@ -36,9 +36,9 @@ namespace IntegracaoVExpensesWeb.Controllers
         }
 
        /// <summary>
-       /// Salva os resultados da api do vExpenses na base de dados
+       /// Salva os resultados da api do VExpenses na base de dados
        /// </summary>
-       /// <param name="resultadosAPI">Objeto vExpenses</param>
+       /// <param name="resultadosAPI">Objeto VExpenses</param>
        /// <returns>JSON de resultado da operação</returns>
         public ActionResult SalvarResultadosApi(VExpensesModel resultadosAPI)
         {
@@ -61,6 +61,7 @@ namespace IntegracaoVExpensesWeb.Controllers
                 {
                     RelatorioId = s.id,
                     DataIntegracao = hoje,
+                    DataAprovacao = s.approval_date,
                     Descricao = s.description,
                     Observacao = s.observation,
                     TipoUsuario = s.user.data.user_type,

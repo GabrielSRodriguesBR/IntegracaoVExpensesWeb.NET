@@ -10,14 +10,21 @@
         });
     };
 
-    $(document).on('click', '.parentContent', function () {
-        var $icon = $(this).find('.parentIcon svg');
+    $(document).on('click', '.parentContent', function (e) {
+        // Verifica se o clique foi em um checkbox (ou dentro dele)
+        if ($(e.target).is('input[type="checkbox"]') || $(e.target).is('.notClick')) {
+            return; // Não faz nada, evita expandir/colapsar
+        }
+
+        var $icon = $(this).find('.parentIcon i'); // Atenção: <i> e não <svg>, conforme seu HTML
         if ($icon.hasClass('fa-angle-right'))
-            $icon.removeClass('fa-angle-right').addClass('fa-angle-down')
+            $icon.removeClass('fa-angle-right').addClass('fa-angle-down');
         else
-            $icon.removeClass('fa-angle-down').addClass('fa-angle-right')
+            $icon.removeClass('fa-angle-down').addClass('fa-angle-right');
+
         $(this).next('.childContent').toggle();
-    })
+    });
+
 
     $('body').on('click', '.monthBox', (e) => {
         var $icon = $(e.target).find('svg');

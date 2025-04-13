@@ -2466,6 +2466,7 @@
     <Content Include="Views\Relatorio\Index.cshtml" />
     <Content Include="Views\Relatorio\_DadosRelatorio.cshtml" />
     <Content Include="Views\Relatorio\_TabelaRelatorio.cshtml" />
+    <Content Include="Views\Relatorio\_DadosRelatorio - Cópia .cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CriptoPass\CriptoPass.csproj">
@@ -2495,7 +2496,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62902</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44385/</IISUrl>
+          <IISUrl>http://localhost:44385/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -21,7 +21,7 @@ namespace IntegracaoVExpensesWeb.Business
         }
 
         /// <summary>
-        /// Consulta relatórios na api do vExpenses
+        /// Consulta relatórios na api do VExpenses
         /// </summary>
         /// <typeparam name="T">Objeto de desserialização que interpreta o retorno da API</typeparam>
         /// <returns></returns>
@@ -42,7 +42,7 @@ namespace IntegracaoVExpensesWeb.Business
         }
 
 		/// <summary>
-		/// Envia pagamentos para a api do vExpenses
+		/// Envia pagamentos para a api do VExpenses
 		/// </summary>
 		/// <typeparam name="T">Objeto de desserialização que interpreta o retorno da API</typeparam>
 		/// <param name="id">id da despesa</param>
@@ -109,7 +109,7 @@ namespace IntegracaoVExpensesWeb.Business
         public string status { get; set; }
         public object approval_stage_id { get; set; }
         public object approval_user_id { get; set; }
-        public object approval_date { get; set; }
+        public DateTime approval_date { get; set; }
         public object payment_date { get; set; }
         public int? payment_method_id { get; set; }
         public string observation { get; set; }
