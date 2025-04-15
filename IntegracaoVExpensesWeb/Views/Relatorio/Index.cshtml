@@ -29,11 +29,7 @@
 
 
     const GetRelatorios = (key) => {
-        return $(`.table_pendentes_${key} table .relatorioId`).map((i, e) => { return $(e).data('id') }).get();
-    }
-
-    const GetRelatoriosPag = (key) => {
-        return $(`.table_pendentes_pag_${key} table .relatorioId`).map((i, e) => { return $(e).data('id') }).get();
+        return $(`.table_${key} .checkItem:checked`).map((i, e) => { return $(e).val() }).get();
     }
 
     const IntegrarDespesasSAP = (key) => {

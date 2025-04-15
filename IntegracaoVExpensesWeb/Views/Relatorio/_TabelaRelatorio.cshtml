@@ -8,18 +8,24 @@
 }
 else
 {
+
+    int mes = Model.FirstOrDefault().DataAprovacao.Month;
+    int ano = Model.FirstOrDefault().DataAprovacao.Year;
+    string key = $"{mes}_{ano}";
+
+
     <div class="d-flex flex-wrap gap-2 mb-3" style=" margin-top: 10px;">
-        <button class="btn btn-warning op-btn" style="width: 120px;" onclick="integrarSAP()">
+        <button class="btn btn-warning op-btn" style="width: 120px;" onclick="IntegrarDespesasSAP(@key)">
             <i class="fa fa-plug d-block mb-1"></i>
             <small>Integrar SAP</small>
         </button>
 
-        <button class="btn btn-primary op-btn" style="width: 120px; " onclick="informarPagamentos()">
+        <button class="btn btn-primary op-btn" style="width: 120px; " onclick="informarPagamentos(@key)">
             <i class="fa fa-credit-card d-block mb-1"></i>
             <small>Informar Pagamentos</small>
         </button>
 
-        <button class="btn btn-success op-btn" style="width: 120px; " onclick="exportarExcel()">
+        <button class="btn btn-success op-btn" style="width: 120px; " onclick="exportarExcel(@key)">
             <i class="fa-regular fa-file-excel d-block mb-1"></i>
             <small>Exportar Excel</small>
         </button>
@@ -49,7 +55,17 @@ else
             @foreach (var item in Model)
             {
                 <tr class="relatorioId parentContent" data-id="@item.RelatorioId">
-                    <td class="notClick"><input type="checkbox" class="checkItem" value="@item.RelatorioId" /></td>
+                    <td class="notClick">
+                        @if (item.DocEntry == null || item.DataPagamento == null)
+                        {
+                            <input type="checkbox" class="checkItem" value="@item.RelatorioId" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" disabled />
+                        }
+
+                    </td>
                     <td class="parentIcon"><i class="fa fa-angle-right"></i></td>
                     <td>@item.RelatorioId</td>
                     <td>@item.Usuario</td>
