@@ -12,6 +12,8 @@ namespace IntegracaoVExpensesWeb.Business.DBContext
 
         public DbSet<RelatorioModel> Relatorios { get; set; }
         public DbSet<DespesaModel> Despesas { get; set; }
+        public DbSet<ConfiguracaoModel> Configuracoes { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

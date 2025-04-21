@@ -10,6 +10,11 @@ using System.Web.Http;
 
 namespace SapService.Controller
 {
+	public class ExpensesModel
+	{
+        public List<int> listaRelatorios { get; set; }
+        public DateTime dtCompetencia { get; set; }
+    }
 	public class ExpensesController : ApiController
 	{
 		[HttpGet]
@@ -51,7 +56,7 @@ namespace SapService.Controller
 
 
 
-				var result = Integracao.Integrar(expense);
+				var result = Integracao.Integrar(expense, DateTime.Now);
 				return JsonConvert.SerializeObject(result);
 
 			}
@@ -63,7 +68,7 @@ namespace SapService.Controller
 		/// <param name="listaRelatorios">Lista de relatórios que vão ser integrados</param>
 		/// <returns></returns>
 		[HttpPost]
-		public (bool status, string text, string exception) Add(List<int> listaRelatorios)
+		public (bool status, string text, string exception) Add(ExpensesModel data)
 		{
 			try
 			{
@@ -71,7 +76,7 @@ namespace SapService.Controller
 				{
 					List<RelatorioModel> relatoriosIntegrar = _db.Relatorios
 					.Include(s => s.Despesas)
-					.Where(s => s.DocEntry == null && listaRelatorios.Any(a => a == s.RelatorioId))
+					.Where(s => s.DocEntry == null && data.listaRelatorios.Any(a => a == s.RelatorioId))
 					.ToList()
 					.Where(s => s.Despesas.Any()) //SAP não deixa integrar relatórios sem itens
 					.ToList(); 
@@ -79,12 +84,21 @@ namespace SapService.Controller
 					if (relatoriosIntegrar.Count == 0)
 						return (false, "Nenhuma despesa pendente de integração com o SAP, recarregue a página e tente novamente", "");
 
+
+					ConfiguracaoModel config = _db.Configuracoes.FirstOrDefault() ?? new ConfiguracaoModel();
+
 					using (SAPExpenses Integracao = new SAPExpenses())
 					{
 						foreach (var relatorio in relatoriosIntegrar)
 						{
 							ExpenseModel expense = new ExpenseModel();
-							expense.memo = relatorio.Descricao;
+
+							expense.accountCode = config.AccountCode;
+							expense.transactionCode = config.TransactionCode;
+							expense.BPLID = config.BPLID;
+
+
+                            expense.memo = relatorio.Descricao;
 							expense.RelatorioID = relatorio.RelatorioId;
 							expense.ref1 = relatorio.RelatorioId.ToString();
 							expense.ref2 = relatorio.Usuario;
@@ -98,12 +112,12 @@ namespace SapService.Controller
 									lineMemo = s.Titulo,
 									dueDate = s.Data,
 									taxDate = s.Data,
-									profitCode = "102",
+									profitCode = config.ProfitCode,
 									ocrCode2 = s.CentroCustoIdSAP,
-									ocrCode3 = "F999999"
-								}).ToList();
+									ocrCode3 = config.OcrCode3
+                                }).ToList();
 
-							var result = Integracao.Integrar(expense);
+							var result = Integracao.Integrar(expense, data.dtCompetencia);
 							if (result.status)
 								relatorio.DocEntry = result.docEntry;
 							else

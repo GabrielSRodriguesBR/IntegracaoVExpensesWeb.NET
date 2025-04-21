@@ -1,0 +1,85 @@
+﻿@model List<IntegracaoVExpensesWeb.Models.RelatorioModel>
+<!-- Modal -->
+<div class="modal fade" id="tabelaModal" tabindex="-1" aria-labelledby="tabelaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tabelaModalLabel">Integrar SAP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (Model.Count > 0)
+                {
+                    int mes = Model.FirstOrDefault().DataAprovacao.Month;
+                    int ano = Model.FirstOrDefault().DataAprovacao.Year;
+                    string key = $"{mes}_{ano}";
+
+                    <div class="d-flex flex-wrap gap-2 mb-3" style=" margin-top: 10px;">
+                        <button class="btn btn-warning op-btn" style="width: 196px; height: 70px; " onclick="IntegrarDespesasSAP('@key')">
+                            <i class="fa fa-plug d-block mb-1"></i>
+                            <small>Confirmar intergração SAP</small>
+                        </button>
+                    </div>
+
+                    <table class="table table-small table-hover" id="tableIntegrar_@key">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="checkAll" data-id="@Model.FirstOrDefault().RelatorioId" /></th>
+                                <th>ID</th>
+                                <th>Usuário</th>
+                                <th>Descrição</th>
+                                <th>Data Aprovação</th>
+                                <th>Data Integração</th>
+                                <th>Integrado no SAP</th>
+                                <th>Pago no VExpenses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="notClick">
+                                        @if (item.DocEntry == null || item.DataPagamento == null)
+                                        {
+                                            <input type="checkbox" class="checkItem" value="@item.RelatorioId" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" disabled />
+                                        }
+
+                                    </td>
+                                    <td>@item.RelatorioId</td>
+                                    <td>@item.Usuario</td>
+                                    <td>@item.Descricao</td>
+                                    <td>@Html.Raw(item.DataAprovacao.ToString("dd/MM/yyyy"))</td>
+                                    <td>@Html.Raw(item.DataIntegracao.ToString("dd/MM/yyyy"))</td>
+                                    <td class="text-center">
+                                        @if (item.DocEntry != null)
+                                        {
+                                            <span class="icon-ok"><i class="fa-solid fa-circle-check"></i></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="icon-nok"><i class="fa-solid fa-circle-xmark"></i></span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.DataPagamento != null)
+                                        {
+                                            <span class="icon-ok"><i class="fa-solid fa-circle-check"></i></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="icon-nok"><i class="fa-solid fa-circle-xmark"></i></span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

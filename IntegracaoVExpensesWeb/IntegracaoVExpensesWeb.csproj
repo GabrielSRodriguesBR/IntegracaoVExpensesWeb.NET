@@ -224,12 +224,14 @@
     <Compile Include="Business\Utils\AppSettingsHandles.cs" />
     <Compile Include="Business\Utils\StringExtensions.cs" />
     <Compile Include="Business\VExpensesAPI.cs" />
+    <Compile Include="Controllers\ConfiguracoesController.cs" />
     <Compile Include="Controllers\ConsultaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConfiguracaoModel.cs" />
     <Compile Include="Models\DespesaModel.cs" />
     <Compile Include="Models\RelatorioModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2467,6 +2469,8 @@
     <Content Include="Views\Relatorio\_DadosRelatorio.cshtml" />
     <Content Include="Views\Relatorio\_TabelaRelatorio.cshtml" />
     <Content Include="Views\Relatorio\_DadosRelatorio - Cópia .cshtml" />
+    <Content Include="Views\Relatorio\_ModalIntegrarSAP.cshtml" />
+    <Content Include="Views\Configuracoes\_ModalConfiguracoes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CriptoPass\CriptoPass.csproj">

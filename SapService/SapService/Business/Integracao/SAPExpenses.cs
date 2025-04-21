@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http;
 
 namespace SapService.Business.Integracao
 {
@@ -20,21 +21,21 @@ namespace SapService.Business.Integracao
 		/// </summary>
 		/// <param name="expense"></param>
 		/// <returns></returns>
-		public (bool status, string text, string exception, int docEntry) Integrar(ExpenseModel expense)
+		[HttpPost]
+		public (bool status, string text, string exception, int docEntry) Integrar(ExpenseModel expense, DateTime dtCompetencia)
 		{
 
 			try
 			{
-				DateTime ultimaDiaMes = GetUltimoDiaDoMesAtual();
 
 				#region capa
 
 				JournalEntries oJournalEntry = (JournalEntries)_sap.GetCompany().GetBusinessObject(BoObjectTypes.oJournalEntries);
-				oJournalEntry.ReferenceDate = ultimaDiaMes;
+				oJournalEntry.ReferenceDate = dtCompetencia;
 				oJournalEntry.Memo = expense.memo;
-				oJournalEntry.TransactionCode = "RDV";
-				oJournalEntry.TaxDate = ultimaDiaMes;
-				oJournalEntry.DueDate = ultimaDiaMes;
+				oJournalEntry.TransactionCode = expense.transactionCode;
+				oJournalEntry.TaxDate = dtCompetencia;
+				oJournalEntry.DueDate = dtCompetencia;
 				oJournalEntry.Series = 17;
 				oJournalEntry.Reference = expense.ref1;
 				oJournalEntry.Reference2 = expense.ref2;
@@ -49,7 +50,7 @@ namespace SapService.Business.Integracao
 					oJournalEntry.Lines.DueDate = line.dueDate;
 					oJournalEntry.Lines.LineMemo = line.lineMemo;
 					oJournalEntry.Lines.TaxDate = line.taxDate;
-					oJournalEntry.Lines.BPLID = 1;
+					oJournalEntry.Lines.BPLID = expense.BPLID;
 					oJournalEntry.Lines.CostingCode = line.profitCode;
 					oJournalEntry.Lines.CostingCode2 = line.ocrCode2;
 					oJournalEntry.Lines.CostingCode3 = line.ocrCode3;
@@ -58,12 +59,12 @@ namespace SapService.Business.Integracao
 				#endregion
 
 				#region última linha (crédito)
-				oJournalEntry.Lines.AccountCode = "1.01.03.03.35";
+				oJournalEntry.Lines.AccountCode = expense.accountCode;
 				oJournalEntry.Lines.Credit = expense.ammountTotal;
-				oJournalEntry.Lines.DueDate = ultimaDiaMes;
+				oJournalEntry.Lines.DueDate = dtCompetencia;
 				oJournalEntry.Lines.LineMemo = expense.creditMemo;
-				oJournalEntry.Lines.TaxDate = ultimaDiaMes;
-				oJournalEntry.Lines.BPLID = 1;
+				oJournalEntry.Lines.TaxDate = dtCompetencia;
+				oJournalEntry.Lines.BPLID = expense.BPLID;
 				oJournalEntry.Lines.Add();
 
 				#endregion
@@ -85,18 +86,6 @@ namespace SapService.Business.Integracao
 			{
 				return (false, $"Ocorreu um erro ao integrar Relatório ID: {expense.RelatorioID}", e.ToString(), 0);
 			}
-		}
-
-		/// <summary>
-		/// Obtém o último dia do mês atual
-		/// </summary>
-		/// <returns></returns>
-		private DateTime GetUltimoDiaDoMesAtual()
-		{
-			DateTime dataAtual = DateTime.Now;
-			DateTime primeiroDiaDoMesSeguinte = new DateTime(dataAtual.Year, dataAtual.Month, 1).AddMonths(1);
-			DateTime ultimoDiaDoMes = primeiroDiaDoMesSeguinte.AddDays(-1);
-			return ultimoDiaDoMes;
 		}
 
 
@@ -138,12 +127,15 @@ namespace SapService.Business.Integracao
 	public class ExpenseModel
 	{
 		public int RelatorioID { get; set; }
-		public string ref1 { get; set; }
+		public string transactionCode { get; set; }
+        public int BPLID { get; set; }
+        public string accountCode { get; set; }
+        public string ref1 { get; set; }
 		public string ref2 { get; set; }
 		public string memo { get; set; }
 		public string creditMemo { get; set; }
 
-		public List<ExpenseItemModel> Itens { get; set; }
+        public List<ExpenseItemModel> Itens { get; set; }
 
 		public double ammountTotal
 		{
@@ -164,5 +156,7 @@ namespace SapService.Business.Integracao
 		public string ocrCode2 { get; set; }
 		public string ocrCode3 { get; set; }
 		public string lineMemo { get; set; }
-	}
+
+  
+    }
 }

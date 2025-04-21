@@ -15,7 +15,7 @@ else
 
 
     <div class="d-flex flex-wrap gap-2 mb-3" style=" margin-top: 10px;">
-        <button class="btn btn-warning op-btn" style="width: 120px;" onclick="IntegrarDespesasSAP(@key)">
+        <button class="btn btn-warning op-btn" style="width: 120px;" onclick="AbrirModalIntegrarSAP(@mes, @ano)">
             <i class="fa fa-plug d-block mb-1"></i>
             <small>Integrar SAP</small>
         </button>
@@ -37,7 +37,6 @@ else
         <thead>
             <tr>
 
-                <th><input type="checkbox" class="checkAll" data-id="@Model.FirstOrDefault().RelatorioId" /></th>
                 <th></th>
                 <th>ID</th>
                 <th>Usuário</th>
@@ -55,17 +54,6 @@ else
             @foreach (var item in Model)
             {
                 <tr class="relatorioId parentContent" data-id="@item.RelatorioId">
-                    <td class="notClick">
-                        @if (item.DocEntry == null || item.DataPagamento == null)
-                        {
-                            <input type="checkbox" class="checkItem" value="@item.RelatorioId" />
-                        }
-                        else
-                        {
-                            <input type="checkbox" disabled />
-                        }
-
-                    </td>
                     <td class="parentIcon"><i class="fa fa-angle-right"></i></td>
                     <td>@item.RelatorioId</td>
                     <td>@item.Usuario</td>
@@ -97,7 +85,7 @@ else
                     </td>
                 </tr>
                 <tr class="childContent">
-                    <td colspan="11" style=" background: #f5f5f5;">
+                    <td colspan="10" style=" background: #f5f5f5;">
                         <div class="col-md-12">
                             <table class="table table-small table-hover">
                                 <thead>

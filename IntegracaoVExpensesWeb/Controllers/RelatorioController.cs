@@ -141,7 +141,7 @@ namespace IntegracaoVExpensesWeb.Controllers
         /// </summary>
         /// <param name="listaRelatorios">Relatórios que estão sendo integrados</param>
         /// <returns>Json com o resultado da operação</returns>
-        public async Task<ActionResult> IntegrarDespesasSAP(List<int> listaRelatorios)
+        public async Task<ActionResult> IntegrarDespesasSAP(List<int> listaRelatorios, DateTime dtCompetencia)
         {
             try
             {
@@ -155,7 +155,7 @@ namespace IntegracaoVExpensesWeb.Controllers
                     return Json(new { status = false, text = "Nenhuma despesa pendente de integração com o SAP, recarregue a página e tente novamente" });
 
                 SapAPI sap = new SapAPI();
-                var integracaoResult = await sap.IntegrarDespesas(listaRelatorios);
+                var integracaoResult = await sap.IntegrarDespesas(listaRelatorios, dtCompetencia);
 
                 return Json(new { integracaoResult.status, integracaoResult.text, integracaoResult.exception }, JsonRequestBehavior.AllowGet);
 
@@ -210,5 +210,29 @@ namespace IntegracaoVExpensesWeb.Controllers
             return RedirectToAction("Index");
 
         }
+
+
+        /// <summary>
+        /// Retorna a view parcial da modal de integração com o SAP
+        /// </summary>
+        /// <param name="mes">Mês de competência</param>
+        /// <param name="ano">Ano de competência</param>
+        /// <returns>View parcial _ModalIntegrarSAP</returns>
+        public ActionResult _ModalIntegrarSAP(int mes, int ano)
+        {
+            var relatorios = db.Relatorios
+                .Include(r => r.Despesas)
+                .Where(r => r.DataAprovacao.Month == mes && r.DataAprovacao.Year == ano && r.DocEntry == null)
+                .OrderByDescending(s => s.ID)
+                .OrderByDescending(s => s.DataIntegracao)
+                .OrderByDescending(s => s.DataAprovacao)
+                .ThenByDescending(s => s.DocEntry != null ? 1 : 0)
+                .ThenByDescending(s => s.DataPagamento != null ? 1 : 0)
+                .ToList();
+
+            return PartialView(relatorios);
+        }
+
+
     }
 }

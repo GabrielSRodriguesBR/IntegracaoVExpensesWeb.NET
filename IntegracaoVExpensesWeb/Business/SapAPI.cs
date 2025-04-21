@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace IntegracaoVExpensesWeb.Business
 {
@@ -23,10 +24,14 @@ namespace IntegracaoVExpensesWeb.Business
 		/// <param name="listaRelatorios">Lista de relatórios que vão ser integrados</param>
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
-		public async Task<(bool status, string text, string exception)> IntegrarDespesas(List<int> listaRelatorios)
+		public async Task<(bool status, string text, string exception)> IntegrarDespesas(List<int> listaRelatorios, DateTime dtCompetencia)
 		{
 
-			var json = JsonConvert.SerializeObject(listaRelatorios);
+			var json = JsonConvert.SerializeObject(new
+			{
+                listaRelatorios = listaRelatorios,
+                dtCompetencia = dtCompetencia
+            });
 			var content = new StringContent(json, Encoding.UTF8, "application/json");
 
 			try

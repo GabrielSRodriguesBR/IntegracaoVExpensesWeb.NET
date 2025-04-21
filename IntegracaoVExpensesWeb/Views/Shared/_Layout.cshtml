@@ -96,20 +96,9 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" href="/">Integracao VExpenses</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @*      <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                        </ul> *@
-                </div>
+
+                <button class="btn btn-outline-dark" onclick="AbrirConfiguracoes()"><i class="fa fa-cog"></i></button>
+        
             </div>
         </nav>
     </header>
@@ -131,6 +120,18 @@
     </footer>
 
     <script>
+
+        const AbrirConfiguracoes = () => {
+            $("body").append('<div class="modal fade" id="modalConfiguracoes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>')
+            $('#modalConfiguracoes').load("@Url.Action("ModalConfiguracoes", "Configuracoes")", () => {
+                var modal = new bootstrap.Modal($('#modalConfiguracoes'));
+                modal.show();
+            })
+            $('#modalConfiguracoes').on('hidden.bs.modal', () => {
+                $('#modalConfiguracoes').remove();
+            });
+        }
+
         const BuscarApi = () => {
             $("body").append('<div class="modal fade" id="modalConsultaAPI" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>')
             $('#modalConsultaAPI').load("@Url.Action("ModalBuscarDadosApi", "Consulta")", () => {
@@ -156,6 +157,33 @@
 
 
         }
+
+
+        const SalvarConfiguracao = () => {
+            const formData = $('#formConfiguracao').serialize();
+            const dialog = bootbox.dialog({
+                message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Salvando...</p>',
+                closeButton: false
+            });
+
+
+              setTimeout(() => {
+                   $.post('/Configuracoes/SalvarConfiguracao', formData, (result) => {
+                         dialog.modal('hide');
+                         if (result.status) {
+                             Alert(result.text, true);
+                             $('#modalConfiguracoes').modal('hide');
+                         } else {
+                             Alert("Erro: " + result.text, false);
+                         }
+                   }).fail(() => {
+                       dialog.modal('hide');
+                       Alert("Erro ao salvar a configuração.", false);
+                   });
+              }, 700);
+
+
+        };
 
 
     </script>

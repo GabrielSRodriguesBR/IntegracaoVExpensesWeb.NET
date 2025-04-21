@@ -1,0 +1,52 @@
+﻿@model IntegracaoVExpensesWeb.Models.ConfiguracaoModel
+
+
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Configuração</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="formConfiguracao">
+                <div class="row">
+                    <span style="display: block; font-weight: 500; border-bottom: 1px solid #e7e7e7; margin-bottom: 14px; padding-bottom: 10px;">Configurações Integração SAP</span>
+                    <div class="col-6">
+                        <label for="TransactionCode" class="form-label">Transaction Code</label>
+                        <input type="text" class="form-control" id="TransactionCode" name="TransactionCode" value="@Model.TransactionCode" required />
+                    </div>
+                    <div class="col-6">
+                        <label for="BPLID" class="form-label">BPLID</label>
+                        <input type="number" class="form-control" id="BPLID" name="BPLID" value="@Model.BPLID" required />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <label for="AccountCode" class="form-label">Account Code</label>
+                        <input type="text" class="form-control" id="AccountCode" name="AccountCode" value="@Model.AccountCode" required />
+                    </div>
+                    <div class="col-6">
+                        <label for="ProfitCode" class="form-label">Profit Code</label>
+                        <input type="text" class="form-control" id="ProfitCode" name="ProfitCode" value="@Model.ProfitCode" required />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <label for="OcrCode3" class="form-label">OCR Code 3</label>
+                        <input type="text" class="form-control" id="OcrCode3" name="OcrCode3" value="@Model.OcrCode3" required />
+                    </div>
+                </div>
+              
+             
+             
+                
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="SalvarConfiguracao()">Salvar</button>
+        </div>
+    </div>
+</div>

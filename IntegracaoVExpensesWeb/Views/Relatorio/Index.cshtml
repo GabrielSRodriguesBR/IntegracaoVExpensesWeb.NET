@@ -8,7 +8,7 @@
 
     $(() => {
         // Quando o checkbox do cabeçalho for clicado
-        $('.checkAll').on('change', function () {
+        $(document).on('change', '.checkAll', function () {
             if ($(this).is(':checked')) {
                 $(this).closest('table').find(`.checkItem`).each((i, e) => $(e).prop('checked', true))
             }
@@ -27,69 +27,121 @@
 	    $(id).load('@Url.Action("_DadosRelatorio")', { mes: mes, ano: ano });
     }
 
+    const AbrirModalIntegrarSAP = (mes, ano) => {
+        const dialog = bootbox.dialog({
+            message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Carregando...</p>',
+            closeButton: false
+        });
+
+        setTimeout(() => {
+            $.get('@Url.Action("_ModalIntegrarSAP", "Relatorio")', { mes: mes, ano: ano }, (data) => {
+                $('#modalContainer').html(data);
+                $('#tabelaModal').modal('show');
+            }).fail(() => {
+                Alert("Erro ao carregar a modal. Tente novamente.", false);
+            }).always(() => {
+                dialog.modal('hide');
+            });
+        }, 700);
+    };
+
+
 
     const GetRelatorios = (key) => {
-        return $(`.table_${key} .checkItem:checked`).map((i, e) => { return $(e).val() }).get();
+        return $(`#tableIntegrar_${key} .checkItem:checked`).map((i, e) => { return $(e).val() }).get();
     }
 
     const IntegrarDespesasSAP = (key) => {
         const listaRelatorios = GetRelatorios(key);
-		if (listaRelatorios.length > 0) {
+        if (listaRelatorios.length > 0) {
 
-			bootbox.confirm({
-				title: 'Confirmar',
-				message: 'Confirmar a integração de despesas com SAP?',
-				buttons: {
-					confirm: {
-						label: '<i class="fa fa-check"></i> OK',
-						className: 'btn-success'
-					},
-					cancel: {
-						label: '<i class="fa fa-times"></i> Cancelar',
-						className: 'btn-danger'
-					}
-				},
-				callback: function (result) {
-					if (!result) return;
-                    $('button').prop('disabled', true);
-                    let dialog = bootbox.dialog({
-                        message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Integrando despesas no SAP...</p>',
-                            closeButton: false
-                     });
+            bootbox.confirm({
+                title: 'Confirmar',
+                message: 'Confirmar a integração de despesas com SAP?',
+                buttons: {
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> OK',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancelar',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (!result) return;
 
+                    const getCurrentDate = () => {
+                        const today = new Date();
+                        const day = ("0" + today.getDate()).slice(-2);
+                        const month = ("0" + (today.getMonth() + 1)).slice(-2);
+                        const year = today.getFullYear();
+                        return `${year}-${month}-${day}`;
+                    };
 
-					$.post('@Url.Action("IntegrarDespesasSAP")', { listaRelatorios: listaRelatorios }, (result) => {
-                        if (result.status) {
-                            Alert(result.text, result.status);
-                            ReloadDados(`#comp_${key}`);
-                        }
-                        else {
-                            bootbox.alert({
-                                title: '<span class="text-danger"><i class="fa fa-warning"></i> Erro ao integrar ao SAP</span>',
-                                message: `<h4 style="word-break: break-all;"><b>${result.text}</b></h4><br/><small>${result.exception ?? ""}</small>`,
-                                size: 'large'
+                    bootbox.prompt({
+                        title: 'Confirme a data da competência',
+                        inputType: 'date',
+                        value: getCurrentDate(),
+                        buttons: {
+                            confirm: {
+                                label: '<i class="fa fa-check"></i> OK',
+                                className: 'btn-success'
+                            },
+                            cancel: {
+                                label: '<i class="fa fa-times"></i> Cancelar',
+                                className: 'btn-danger'
+                            }
+                        },
+                        callback: function (dtCompetencia) {
+                            if (!dtCompetencia) return;
+
+                            // Validação: Verifica se a data da competência é maior que hoje
+                            const today = new Date();
+                            const selectedDate = new Date(dtCompetencia);
+
+                            if (selectedDate > today) {
+                                Alert("A data da competência não pode ser maior que hoje.", false);
+                                return;
+                            }
+
+                            $('button').prop('disabled', true);
+                            let dialog = bootbox.dialog({
+                                message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Integrando despesas no SAP...</p>',
+                                closeButton: false
+                            });
+
+                            $.post('@Url.Action("IntegrarDespesasSAP")', { listaRelatorios: listaRelatorios, dtCompetencia: dtCompetencia }, (result) => {
+                                if (result.status) {
+                                    Alert(result.text, result.status);
+                                    ReloadDados(`#comp_${key}`);
+                                } else {
+                                    bootbox.alert({
+                                        title: '<span class="text-danger"><i class="fa fa-warning"></i> Erro ao integrar ao SAP</span>',
+                                        message: `<h4 style="word-break: break-all;"><b>${result.text}</b></h4><br/><small>${result.exception ?? ""}</small>`,
+                                        size: 'large'
+                                    });
+                                }
+                            }, 'json')
+                            .fail(function (xhr, status, error) {
+                                Alert("Ocorreu um erro: " + error, false);
                             })
+                            .always(function () {
+                                $('button').prop('disabled', false);
+                                dialog.modal('hide');
+                            });
                         }
-					}, 'json')
-                    .fail(function (xhr, status, error) {
-                    	Alert("Ocorreu um erro: " + error, false);
-					})
-                    .always(function () {
-                        $('button').prop('disabled', false);
-                        dialog.modal('hide');
                     });
-				}
 
-			})
+                    // Adiciona o atributo 'max' ao input de data após o prompt ser renderizado
+                    setTimeout(() => {
+                        $('.bootbox-input-date').attr('max', getCurrentDate());
+                    }, 100);
+                }
+            });
+        }
+    };
 
-
-
-
-
-
-		}
-
-	}
 
     const ExportarDespesas = (key) => {
         const listaRelatorios = GetRelatorios(key);
@@ -112,7 +164,7 @@
     }
 
     const IntegrarPagamentos = (key) => {
- 
+
         const listaRelatorios = GetRelatoriosPag(key);
 		if (listaRelatorios.length > 0) {
 
@@ -140,6 +192,14 @@
 				},
 				callback: function (dtPagamento) {
                     if (!dtPagamento) return;
+
+
+
+
+
+
+
+
                     let dialog = bootbox.dialog({
                         message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Integrando pagamento no VExpenses...</p>',
                         closeButton: false
@@ -272,3 +332,4 @@ else
 
 
 }
+<div id="modalContainer"></div>
