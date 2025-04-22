@@ -27,6 +27,25 @@
 	    $(id).load('@Url.Action("_DadosRelatorio")', { mes: mes, ano: ano });
     }
 
+
+    const AbrirModalInformarPagamentos= (mes, ano) => {
+         const dialog = bootbox.dialog({
+             message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Carregando...</p>',
+             closeButton: false
+         });
+
+         setTimeout(() => {
+             $.get('@Url.Action("_ModalInformarPagamentos", "Relatorio")', { mes: mes, ano: ano }, (data) => {
+                 $('#modalContainer').html(data);
+                 $('#tabelaModal').modal('show');
+             }).fail(() => {
+                 Alert("Erro ao carregar a modal. Tente novamente.", false);
+             }).always(() => {
+                 dialog.modal('hide');
+             });
+         }, 700);
+     };
+
     const AbrirModalIntegrarSAP = (mes, ano) => {
         const dialog = bootbox.dialog({
             message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Carregando...</p>',
@@ -49,6 +68,11 @@
 
     const GetRelatorios = (key) => {
         return $(`#tableIntegrar_${key} .checkItem:checked`).map((i, e) => { return $(e).val() }).get();
+    }
+
+
+    const GetRelatoriosPag = (key) => {
+        return $(`#tablePagamento_${key} .checkItem:checked`).map((i, e) => { return $(e).val() }).get();
     }
 
     const IntegrarDespesasSAP = (key) => {
@@ -80,7 +104,7 @@
                     };
 
                     bootbox.prompt({
-                        title: 'Confirme a data da competência',
+                        title: 'Confirme a data de lançamento no SAP',
                         inputType: 'date',
                         value: getCurrentDate(),
                         buttons: {
@@ -101,7 +125,7 @@
                             const selectedDate = new Date(dtCompetencia);
 
                             if (selectedDate > today) {
-                                Alert("A data da competência não pode ser maior que hoje.", false);
+                                Alert("A data de lançamento não pode ser maior que hoje.", false);
                                 return;
                             }
 
@@ -111,25 +135,30 @@
                                 closeButton: false
                             });
 
-                            $.post('@Url.Action("IntegrarDespesasSAP")', { listaRelatorios: listaRelatorios, dtCompetencia: dtCompetencia }, (result) => {
-                                if (result.status) {
-                                    Alert(result.text, result.status);
-                                    ReloadDados(`#comp_${key}`);
-                                } else {
-                                    bootbox.alert({
-                                        title: '<span class="text-danger"><i class="fa fa-warning"></i> Erro ao integrar ao SAP</span>',
-                                        message: `<h4 style="word-break: break-all;"><b>${result.text}</b></h4><br/><small>${result.exception ?? ""}</small>`,
-                                        size: 'large'
-                                    });
-                                }
-                            }, 'json')
-                            .fail(function (xhr, status, error) {
-                                Alert("Ocorreu um erro: " + error, false);
-                            })
-                            .always(function () {
-                                $('button').prop('disabled', false);
-                                dialog.modal('hide');
-                            });
+                            setTimeout(() => {
+
+                                $.post('@Url.Action("IntegrarDespesasSAP")', { listaRelatorios: listaRelatorios, dtCompetencia: dtCompetencia }, (result) => {
+                                    if (result.status) {
+                                        Alert(result.text, result.status);
+                                        ReloadDados(`#comp_${key}`);
+                                        $('#tabelaModal').modal('hide');
+                                    } else {
+                                        bootbox.alert({
+                                            title: '<span class="text-danger"><i class="fa fa-warning"></i> Erro ao integrar ao SAP</span>',
+                                            message: `<h4 style="word-break: break-all;"><b>${result.text}</b></h4><br/><small>${result.exception ?? ""}</small>`,
+                                            size: 'large'
+                                        });
+                                    }
+                                }, 'json')
+                                .fail(function (xhr, status, error) {
+                                    Alert("Ocorreu um erro: " + error, false);
+                                })
+                                .always(function () {
+                                    $('button').prop('disabled', false);
+                                    dialog.modal('hide');
+                                });
+                                }, 700);
+
                         }
                     });
 
@@ -143,91 +172,135 @@
     };
 
 
-    const ExportarDespesas = (key) => {
-        const listaRelatorios = GetRelatorios(key);
-        if (listaRelatorios.length > 0) {
+    const ExportarDespesas = (mes, ano) => {
 
-            var $form = $('<form>', {
-                action: '@Url.Action("ExportarDespesas")',
-                method: 'post'
-            });
-            listaRelatorios.forEach(function (id) {
-                var $input = $('<input>', {
-                    type: 'hidden',
-                    name: 'listaRelatorios',
-                    value: id
-                });
-                $form.append($input);
-            });
-            $form.appendTo('body').submit().remove();
-        }
+        window.location = `@Url.Action("ExportarDespesas")?mes=${mes}&ano=${ano}`
+
     }
 
     const IntegrarPagamentos = (key) => {
 
         const listaRelatorios = GetRelatoriosPag(key);
-		if (listaRelatorios.length > 0) {
+        if (listaRelatorios.length > 0) {
 
-			const getCurrentDate = () => {
-				var today = new Date();
-				var day = ("0" + today.getDate()).slice(-2);
-				var month = ("0" + (today.getMonth() + 1)).slice(-2);
-				var year = today.getFullYear();
-				return year + "-" + month + "-" + day;
-			}
-
-			bootbox.prompt({
-				title: 'Informe a data de pagamento',
-				inputType: 'date',
-				value: getCurrentDate(),
-				buttons: {
-					confirm: {
-						label: '<i class="fa fa-check"></i> OK',
-						className: 'btn-success'
-					},
-					cancel: {
-						label: '<i class="fa fa-times"></i> Cancelar',
-						className: 'btn-danger'
-					}
-				},
-				callback: function (dtPagamento) {
-                    if (!dtPagamento) return;
+            bootbox.confirm({
+                title: 'Confirmar',
+                message: 'Confirmar a integração de pagamentos com VExpenses?',
+                buttons: {
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> OK',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancelar',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (!result) return;
 
 
+                    const getCurrentDate = () => {
+                        var today = new Date();
+                        var day = ("0" + today.getDate()).slice(-2);
+                        var month = ("0" + (today.getMonth() + 1)).slice(-2);
+                        var year = today.getFullYear();
+                        return year + "-" + month + "-" + day;
+                    }
+
+                    bootbox.prompt({
+                        title: 'Informe a data de pagamento',
+                        inputType: 'date',
+                        value: getCurrentDate(),
+                        buttons: {
+                            confirm: {
+                                label: '<i class="fa fa-check"></i> OK',
+                                className: 'btn-success'
+                            },
+                            cancel: {
+                                label: '<i class="fa fa-times"></i> Cancelar',
+                                className: 'btn-danger'
+                            }
+                        },
+                        callback: function (dtPagamento) {
+                            if (!dtPagamento) return;
+
+                            const getCurrentDate = () => {
+                                const today = new Date();
+                                const day = ("0" + today.getDate()).slice(-2);
+                                const month = ("0" + (today.getMonth() + 1)).slice(-2);
+                                const year = today.getFullYear();
+                                return `${year}-${month}-${day}`;
+                            };
+
+                            // Validação: Verifica se a data de pagamento é maior que hoje
+                            const today = new Date();
+                            const selectedDate = new Date(dtPagamento);
+
+                            if (selectedDate > today) {
+                                Alert("A data de pagamento não pode ser maior que hoje.", false);
+                                return;
+                            }
+
+
+                            let dialog = bootbox.dialog({
+                                message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Integrando pagamento no VExpenses...</p>',
+                                closeButton: false
+                            });
+
+                            $('button').prop('disabled', true);
+
+                            setTimeout(() => {
+                                $.post('@Url.Action("IntegrarPagamentos")', { listaRelatorios: listaRelatorios, dtPagamento: dtPagamento }, (result) => {
+                                    if (result.status) {
+                                        Alert(result.text, result.status);
+                                        ReloadDados(`#comp_${key}`);
+                                        $('#tabelaModal').modal('hide');
+                                    }
+                                    else {
+                                        bootbox.alert({
+                                            title: '<span class="text-danger"><i class="fa fa-warning"></i> Erro ao integrar ao VExpenses</span>',
+                                            message: `<h4 style="word-break: break-all;"><b>${result.text}</b></h4><br/><small>${result.exception ?? ""}</small>`,
+                                            size: 'large'
+                                        })
+                                    }
+                                      }, 'json')
+                                .fail(function (xhr, status, error) {
+                                       Alert("Ocorreu um erro: " + error, false);
+                                      })
+                                .always(function () {
+                                    $('button').prop('disabled', false);
+                                    dialog.modal('hide');
+                                });
+                            }, 700);
 
 
 
-
-
-
-                    let dialog = bootbox.dialog({
-                        message: '<p class="text-center mb-0"><i class="fa-solid fa-spin fa-gear"></i> Integrando pagamento no VExpenses...</p>',
-                        closeButton: false
-                    });
-					$('button').prop('disabled', true);
-                    $.post('@Url.Action("IntegrarPagamentos")', { listaRelatorios: listaRelatorios, dtPagamento: dtPagamento }, (result) => {
-                        if (result.status) {
-                            Alert(result.text, result.status);
-                            ReloadDados(`#comp_${key}`);
                         }
-                        else {
-                            bootbox.alert({
-                                title: '<span class="text-danger"><i class="fa fa-warning"></i> Erro ao integrar ao SAP</span>',
-                                message: `<h4 style="word-break: break-all;"><b>${result.text}</b></h4><br/><small>${result.exception ?? ""}</small>`,
-                                size: 'large'
-                            })
-                        }
-					}, 'json')
-                    .fail(function (xhr, status, error) {
-                    	Alert("Ocorreu um erro: " + error, false);
-					})
-                    .always(function () {
-                        $('button').prop('disabled', false);
-                        dialog.modal('hide');
                     });
 
-				}
-			});
+                    // Adiciona o atributo 'max' ao input de data após o prompt ser renderizado
+                    setTimeout(() => {
+                        $('.bootbox-input-date').attr('max', getCurrentDate());
+                    }, 100);
+
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 	}
 </script>
@@ -322,7 +395,13 @@ else
             </div>
 
             <div class="monthContent" id="@key" data-mes="@mes" data-ano="@ano">
-                @Html.Partial("_DadosRelatorio", item.Select(s => s).ToList())
+                @Html.Partial("_DadosRelatorio", item.Select(s => s)
+                .OrderByDescending(s => s.ID)
+                .OrderByDescending(s => s.DataIntegracao)
+                .OrderByDescending(s => s.DataIntegracao)
+                .ThenByDescending(s => s.DocEntry != null ? 1 : 0)
+                .ThenByDescending(s => s.DataPagamento != null ? 1 : 0)
+                .ToList())
             </div>
         </div>
 

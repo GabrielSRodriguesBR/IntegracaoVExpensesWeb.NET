@@ -110,7 +110,7 @@ namespace SapService.Controller
 									accountCode = s.TipoIdSAP,
 									amount = Convert.ToDouble(s.Valor),
 									lineMemo = s.Titulo,
-									dueDate = s.Data,
+									dueDate = data.dtCompetencia,
 									taxDate = s.Data,
 									profitCode = config.ProfitCode,
 									ocrCode2 = s.CentroCustoIdSAP,

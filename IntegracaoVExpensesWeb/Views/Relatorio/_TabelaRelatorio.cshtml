@@ -20,12 +20,12 @@ else
             <small>Integrar SAP</small>
         </button>
 
-        <button class="btn btn-primary op-btn" style="width: 120px; " onclick="informarPagamentos(@key)">
+        <button class="btn btn-primary op-btn" style="width: 120px; " onclick="AbrirModalInformarPagamentos(@mes, @ano)">
             <i class="fa fa-credit-card d-block mb-1"></i>
             <small>Informar Pagamentos</small>
         </button>
 
-        <button class="btn btn-success op-btn" style="width: 120px; " onclick="exportarExcel(@key)">
+        <button class="btn btn-success op-btn" style="width: 120px; " onclick="ExportarDespesas(@mes, @ano)">
             <i class="fa-regular fa-file-excel d-block mb-1"></i>
             <small>Exportar Excel</small>
         </button>
@@ -51,7 +51,11 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.OrderByDescending(s => s.ID)
+    .OrderByDescending(s => s.DataIntegracao)
+    .OrderByDescending(s => s.DataIntegracao)
+    .ThenByDescending(s => s.DocEntry != null ? 1 : 0)
+    .ThenByDescending(s => s.DataPagamento != null ? 1 : 0))
             {
                 <tr class="relatorioId parentContent" data-id="@item.RelatorioId">
                     <td class="parentIcon"><i class="fa fa-angle-right"></i></td>

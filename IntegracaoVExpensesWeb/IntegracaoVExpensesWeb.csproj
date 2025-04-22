@@ -2471,6 +2471,7 @@
     <Content Include="Views\Relatorio\_DadosRelatorio - Cópia .cshtml" />
     <Content Include="Views\Relatorio\_ModalIntegrarSAP.cshtml" />
     <Content Include="Views\Configuracoes\_ModalConfiguracoes.cshtml" />
+    <Content Include="Views\Relatorio\_ModalInformarPagamentos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CriptoPass\CriptoPass.csproj">

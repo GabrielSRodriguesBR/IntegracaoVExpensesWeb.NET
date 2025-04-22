@@ -116,6 +116,10 @@ namespace IntegracaoVExpensesWeb.Controllers
                 if (relatoriosPagar.Count == 0)
                     return Json(new { status = false, text = "Atenção", exception = "Nenhuma despesa pendente de pagamento, recarregue a página e tente novamente" });
 
+
+
+                //return Json(new { status = true, text = "Pagamentos informados com sucesso!" });
+
                 foreach (var relatorio in relatoriosPagar)
                 {
 
@@ -173,11 +177,11 @@ namespace IntegracaoVExpensesWeb.Controllers
         /// </summary>
         /// <param name="listaRelatorios">Relatórios que estão sendo exportados</param>
         /// <returns>Arquivo .xlsx</returns>
-        public ActionResult ExportarDespesas(List<int> listaRelatorios)
+        public ActionResult ExportarDespesas(int mes, int ano)
         {
             var despesas = db.Despesas
                     .Include(s => s.Relatorio)
-                    .Where(s => s.Relatorio.DocEntry == null && listaRelatorios.Any(a => a == s.RelatorioId))
+                    .Where(s => s.Relatorio.DataAprovacao.Month == mes && s.Relatorio.DataAprovacao.Year == ano)
                     .Select(s => new
                     {
                         s.RelatorioId,
@@ -227,6 +231,26 @@ namespace IntegracaoVExpensesWeb.Controllers
                 .OrderByDescending(s => s.DataIntegracao)
                 .OrderByDescending(s => s.DataAprovacao)
                 .ThenByDescending(s => s.DocEntry != null ? 1 : 0)
+                .ThenByDescending(s => s.DataPagamento != null ? 1 : 0)
+                .ToList();
+
+            return PartialView(relatorios);
+        }
+
+        /// <summary>
+        /// Retorna a view parcial da modal de informe de pagamentps
+        /// </summary>
+        /// <param name="mes">Mês de competência</param>
+        /// <param name="ano">Ano de competência</param>
+        /// <returns>View parcial _ModalInformarPagamentos</returns>
+        public ActionResult _ModalInformarPagamentos(int mes, int ano)
+        {
+            var relatorios = db.Relatorios
+                .Include(r => r.Despesas)
+                .Where(r => r.DataAprovacao.Month == mes && r.DataAprovacao.Year == ano && r.DocEntry != null && r.DataPagamento == null)
+                .OrderByDescending(s => s.ID)
+                .OrderByDescending(s => s.DataIntegracao)
+                .OrderByDescending(s => s.DataAprovacao)
                 .ThenByDescending(s => s.DataPagamento != null ? 1 : 0)
                 .ToList();
 
