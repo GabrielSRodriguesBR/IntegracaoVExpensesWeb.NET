@@ -51,10 +51,10 @@ namespace SapService.Business.Integracao
                     oJournalEntry.Lines.LineMemo = line.lineMemo != null
             ? line.lineMemo.Substring(0, Math.Min(50, line.lineMemo.Length))
             : null;
-					oJournalEntry.Lines.TaxDate = line.taxDate;
+                    oJournalEntry.Lines.TaxDate = line.taxDate;
 					oJournalEntry.Lines.BPLID = expense.BPLID;
-					oJournalEntry.Lines.CostingCode = line.profitCode;
-					oJournalEntry.Lines.CostingCode2 = line.ocrCode2;
+					oJournalEntry.Lines.CostingCode = line.ocrCode2;
+
 					oJournalEntry.Lines.CostingCode3 = line.ocrCode3;
 					oJournalEntry.Lines.Add();
 				}
