@@ -48,7 +48,9 @@ namespace SapService.Business.Integracao
 					oJournalEntry.Lines.AccountCode = line.accountCode;
 					oJournalEntry.Lines.Debit = line.amount;
 					oJournalEntry.Lines.DueDate = line.dueDate;
-					oJournalEntry.Lines.LineMemo = line.lineMemo;
+                    oJournalEntry.Lines.LineMemo = line.lineMemo != null
+            ? line.lineMemo.Substring(0, Math.Min(50, line.lineMemo.Length))
+            : null;
 					oJournalEntry.Lines.TaxDate = line.taxDate;
 					oJournalEntry.Lines.BPLID = expense.BPLID;
 					oJournalEntry.Lines.CostingCode = line.profitCode;
@@ -59,7 +61,7 @@ namespace SapService.Business.Integracao
 				#endregion
 
 				#region última linha (crédito)
-				oJournalEntry.Lines.AccountCode = expense.accountCode;
+				oJournalEntry.Lines.AccountCode = !String.IsNullOrEmpty(expense.accountUser) ? expense.accountUser : expense.accountCode;
 				oJournalEntry.Lines.Credit = expense.ammountTotal;
 				oJournalEntry.Lines.DueDate = dtCompetencia;
 				oJournalEntry.Lines.LineMemo = expense.creditMemo;
@@ -134,6 +136,7 @@ namespace SapService.Business.Integracao
 		public string ref2 { get; set; }
 		public string memo { get; set; }
 		public string creditMemo { get; set; }
+		public string accountUser { get; set; }
 
         public List<ExpenseItemModel> Itens { get; set; }
 

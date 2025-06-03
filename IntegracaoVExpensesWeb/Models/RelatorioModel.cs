@@ -39,6 +39,9 @@ namespace IntegracaoVExpensesWeb.Models
         [Column("DATA_PGTO")]
         public DateTime? DataPagamento { get; set; }
 
+        [Column("CONTA")]
+        public string Conta { get; set; }
+
         public ICollection<DespesaModel> Despesas { get; set; }
     }
 

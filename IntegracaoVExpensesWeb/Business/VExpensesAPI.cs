@@ -198,7 +198,7 @@ namespace IntegracaoVExpensesWeb.Business
     public class Data2
     {
         public int id { get; set; }
-        public object integration_id { get; set; }
+        public string integration_id { get; set; }
         public object external_id { get; set; }
         public int company_id { get; set; }
         public object role_id { get; set; }

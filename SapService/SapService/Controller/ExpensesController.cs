@@ -97,7 +97,7 @@ namespace SapService.Controller
 							expense.transactionCode = config.TransactionCode;
 							expense.BPLID = config.BPLID;
 
-
+							expense.accountUser = relatorio.Conta;
                             expense.memo = relatorio.Descricao;
 							expense.RelatorioID = relatorio.RelatorioId;
 							expense.ref1 = relatorio.RelatorioId.ToString();
