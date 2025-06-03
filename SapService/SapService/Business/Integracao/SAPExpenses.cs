@@ -48,9 +48,18 @@ namespace SapService.Business.Integracao
 					oJournalEntry.Lines.AccountCode = line.accountCode;
 					oJournalEntry.Lines.Debit = line.amount;
 					oJournalEntry.Lines.DueDate = line.dueDate;
-                    oJournalEntry.Lines.LineMemo = line.lineMemo != null
-            ? line.lineMemo.Substring(0, Math.Min(50, line.lineMemo.Length))
-            : null;
+                    if (!String.IsNullOrEmpty(line.lineMemo))
+                    {
+
+                        if (line.lineMemo.Length < 50)
+                            oJournalEntry.Lines.LineMemo = line.lineMemo;
+                        else
+                        {
+                            oJournalEntry.Lines.LineMemo = line.lineMemo.Substring(0, Math.Min(50, line.lineMemo.Length));
+
+                        }
+
+                    }
                     oJournalEntry.Lines.TaxDate = line.taxDate;
 					oJournalEntry.Lines.BPLID = expense.BPLID;
 					oJournalEntry.Lines.CostingCode = line.ocrCode2;
