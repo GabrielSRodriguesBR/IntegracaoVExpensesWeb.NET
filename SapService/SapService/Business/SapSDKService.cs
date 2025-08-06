@@ -26,7 +26,7 @@ namespace SapService.Business
 			_company.CompanyDB = _sapConfig.CompanyDB;
 			_company.UserName = _sapConfig.UserName;
 			_company.Password = _sapConfig.Password;
-			_company.DbServerType = BoDataServerTypes.dst_MSSQL2014;
+			_company.DbServerType = BoDataServerTypes.dst_MSSQL2017;
 			_company.DbUserName = _sapConfig.DbUserName;
 			_company.DbPassword = CriptoPass.CriptoPass.DescriptografarSenha(_sapConfig.DbPassword);
 			_company.UserName = _sapConfig.UserName;

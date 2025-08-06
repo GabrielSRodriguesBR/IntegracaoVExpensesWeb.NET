@@ -66,7 +66,7 @@ namespace IntegracaoVExpensesWeb.Controllers
                     Observacao = s.observation,
                     TipoUsuario = s.user.data.user_type,
                     Usuario = s.user.data.name,
-                    Conta = s.user.data.integration_id,
+                    //Conta = s.user.data.integration_id,
                     UsuarioIdSAP = s.user.data.id.ToString(),
                 })
                 .ToList();
