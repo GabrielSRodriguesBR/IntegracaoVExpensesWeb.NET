@@ -153,7 +153,7 @@ namespace IntegracaoVExpensesWeb.Business
         public bool on { get; set; }
         public string mileage_value { get; set; }
         public string original_currency_iso { get; set; }
-        public int? exchange_rate { get; set; }
+        public double? exchange_rate { get; set; }
         public float? converted_value { get; set; }
         public string converted_currency_iso { get; set; }
         public string created_at { get; set; }
