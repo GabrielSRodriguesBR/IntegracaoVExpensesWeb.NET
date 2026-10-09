@@ -202,7 +202,7 @@ namespace IntegracaoVExpensesWeb.Business
         public object external_id { get; set; }
         public int company_id { get; set; }
         public object role_id { get; set; }
-        public int approval_flow_id { get; set; }
+        public int? approval_flow_id { get; set; }
         public int expense_limit_policy_id { get; set; }
         public string user_type { get; set; }
         public string name { get; set; }
